@@ -182,6 +182,16 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function registerUser($nome, $cognome, $email, $username, $password, $id_ruolo)
+    {
+        $query = "INSERT INTO utenti (nome, cognome, email, username, password, id_ruolo) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('sssssi', $nome, $cognome, $email, $username, $password, $id_ruolo);
+        $stmt->execute();
+
+        return $stmt->insert_id;
+    }
+
     public function checkLogin($identifier, $password)
     {
         $query = "SELECT id, nome, email, username, id_ruolo FROM utenti WHERE (email = ? OR username = ?) AND password = ?";
