@@ -89,8 +89,8 @@ class DatabaseHelper
     public function getProductsByCategory($idcategory)
     {
         $query = "SELECT id, titolo, immagine, descrizione, prezzo, sconto, quantita_disponibile, data_creazione 
-                  FROM prodotti 
-                  WHERE id_categoria=?";
+                FROM prodotti
+                WHERE id_categoria=?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $idcategory);
         $stmt->execute();
@@ -102,8 +102,8 @@ class DatabaseHelper
     public function getProductsByUserId($userId)
     {
         $query = "SELECT id, titolo, immagine, descrizione, prezzo, sconto, quantita_disponibile, data_creazione 
-                  FROM prodotti 
-                  WHERE id_utente=?";
+                FROM prodotti
+                WHERE id_utente=?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $userId);
         $stmt->execute();
@@ -182,17 +182,27 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function checkLogin($email, $password)
+    public function checkLogin($identifier, $password)
     {
-        $query = "SELECT id, nome, email FROM utenti WHERE email = ? AND password = ?";
+        $query = "SELECT id, nome, email, username, id_ruolo FROM utenti WHERE (email = ? OR username = ?) AND password = ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ss', $email, $password);
+        $stmt->bind_param('sss', $identifier, $identifier, $password);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        return $result->fetch_all(MYSQLI_ASSOC);
+        return $result->fetch_assoc();
     }
 
+    public function getRoleByUsername($username)
+    {
+        $query = "SELECT r.nome AS ruolo FROM utenti u JOIN ruoli r ON u.id_ruolo = r.id WHERE u.username = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_assoc();
+    }
     public function getCarts()
     {
         $stmt = $this->db->prepare("SELECT * FROM carrelli");
