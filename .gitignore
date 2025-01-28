@@ -1,0 +1,29 @@
+# Configurazioni di Visual Studio Code
+.vscode/
+.vscode/*
+
+# File di sistema
+.DS_Store
+Thumbs.db
+
+# Cartelle di sistema
+node_modules/
+vendor/
+
+# File di log
+*.log
+
+# File di cache
+.cache/
+tmp/
+temp/
+
+# File di configurazione
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cartelle e file specifici del progetto
+/TownfolkMagicShop-TW/da cancellare
