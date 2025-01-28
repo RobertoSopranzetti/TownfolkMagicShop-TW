@@ -24,15 +24,13 @@ function registerLoggedUser($user)
 
 function getUserIcon($ruolo)
 {
-    if (isset($_SESSION['idutente'])) {
-        $_SESSION['ruolo'] = $ruolo;
-        if ($_SESSION['ruolo'] == 'venditore') {
-            return '<a class="navbar-brand" href="ordini.php"><i class="bi bi-clipboard-data"></i></a>';
-        } else {
-            return '<a class="navbar-brand" href="carrello.php"><i class="bi bi-cart"></i></a>';
-        }
+    $_SESSION['ruolo'] = $ruolo;
+    if ($_SESSION['ruolo'] == 'venditore') {
+        return '<a class="navbar-brand d-lg-none" href="ordini.php"><i class="bi bi-clipboard-data"></i></a>
+                <a class="navbar-brand d-none d-lg-block" href="ordini.php">Ordini</a>';
     } else {
-        return '<a class="navbar-brand" href="carrello.php"><i class="bi bi-cart"></i></a>';
+        return '<a class="navbar-brand d-lg-none" href="carrello.php"><i class="bi bi-cart"></i></a>
+                <a class="navbar-brand d-none d-lg-block" href="carrello.php">Carrello</a>';
     }
 }
 
