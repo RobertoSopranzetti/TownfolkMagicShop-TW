@@ -8,7 +8,7 @@
             <a href="dashboard.php" class="btn btn-info btn-lg me-md-2">
                 <i class="bi bi-search"></i> Esplora i nostri prodotti
             </a>
-            <a href="registra-utente.php" class="btn btn-warning btn-lg">
+            <a href="<?php echo !isUserLoggedIn() ? "registra-utente.php" : "login-home.php" ?>" class="btn btn-warning btn-lg">
                 <i class="bi bi-person-plus"></i> Registrati
             </a>
         </div>
