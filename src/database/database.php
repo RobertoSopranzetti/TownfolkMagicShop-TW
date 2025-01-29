@@ -173,13 +173,15 @@ class DatabaseHelper
         return $stmt->execute();
     }
 
-    public function getUsers()
+    public function getUserById($id)
     {
-        $stmt = $this->db->prepare("SELECT * FROM utenti");
+        $query = "SELECT id, username FROM utenti WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $id);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        return $result->fetch_all(MYSQLI_ASSOC);
+        return $result->fetch_assoc();
     }
 
     public function registerUser($nome, $cognome, $email, $username, $password, $id_ruolo)
