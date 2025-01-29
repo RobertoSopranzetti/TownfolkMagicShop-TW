@@ -59,7 +59,7 @@ function getAction($action)
 
 function getRegistrationDetails($isVenditore) {
     $details = [];
-    $details['titolo'] = $isVenditore ? "Un nuovo commerciante si unisce alla gilda" : "Un nuovo avventuriero si unisce alla gilda";
+    $details['titolo'] = $isVenditore ? "Un nuovo commerciante si unisce alla gilda!!" : "Un nuovo avventuriero si unisce alla gilda!!";
     $details['linkVenditore'] = !$isVenditore ? '<p class="text-center">Sei un <a href="registra-utente.php?venditore=1">venditore</a>?</p>' : '';
     return $details;
 }
