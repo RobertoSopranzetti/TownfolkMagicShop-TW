@@ -184,9 +184,9 @@ class DatabaseHelper
 
     public function registerUser($nome, $cognome, $email, $username, $password, $id_ruolo)
     {
-        $query = "INSERT INTO utenti (nome, cognome, email, username, password, id_ruolo) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO utenti (email, username, nome, cognome, password, id_ruolo) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('sssssi', $nome, $cognome, $email, $username, $password, $id_ruolo);
+        $stmt->bind_param('sssssi', $email, $username, $nome, $cognome, $password, $id_ruolo);
         $stmt->execute();
 
         return $stmt->insert_id;
