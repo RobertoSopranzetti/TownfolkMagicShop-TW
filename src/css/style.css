@@ -21,6 +21,10 @@ section ul li a:hover {
     font-size: 1.5rem;
 }
 
+.quantity-input {
+    max-width: 100px;
+}
+
 @media (max-width: 992px) {
     .form-label {
         display: none;
