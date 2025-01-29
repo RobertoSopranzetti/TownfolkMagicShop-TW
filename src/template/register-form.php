@@ -8,8 +8,10 @@ $details = getRegistrationDetails($isVenditore); ?>
             <?php echo $templateParams["erroreregistrazione"]; ?>
         </div>
     <?php endif; ?>
-    <p class="text-center">Compila i seguenti campi:</p>
-    <?php echo $details['linkVenditore']; ?>
+    <div class="d-flex justify-content-between">
+        <p class="mb-0"><strong>Compila i seguenti campi:</strong></p>
+        <?php echo $details['linkVenditore']; ?>
+    </div>
     <form action="#" method="POST">
         <div class="mb-3">
             <label for="username" class="form-label d-none d-lg-block">Username:</label>
