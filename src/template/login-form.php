@@ -16,4 +16,5 @@
     <div class="d-grid">
         <button type="submit" class="btn btn-primary">Invia</button>
     </div>
+    <p class="text-center mt-3">Non hai un account? <a href="registra-cliente.php">Registrati</a></p>
 </form>
