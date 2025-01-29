@@ -2,6 +2,10 @@ header nav a:hover {
     color: red !important;
 }
 
+section ul li a:hover {
+    color: red !important;
+}
+
 .input-group-text.rounded-pill-start {
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
