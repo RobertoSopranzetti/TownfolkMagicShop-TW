@@ -15,14 +15,14 @@ if(isset($_POST["identifier"]) && isset($_POST["password"])){
 }
 
 if(isUserLoggedIn()){
-    $templateParams["titolo"] = "Blog TW - Admin";
+    $templateParams["titolo"] = "TownfolkMagicShop - User Home";
     $templateParams["nome"] = "login-home.php";
     if(isset($_GET["formmsg"])){
         $templateParams["formmsg"] = $_GET["formmsg"];
     }
 }
 else{
-    $templateParams["titolo"] = "TonfolkMagicShop - Login";
+    $templateParams["titolo"] = "TownfolkMagicShop - Login";
     $templateParams["nome"] = "login-form.php";
 }
 $templateParams["categorie"] = $dbh->getCategories();
