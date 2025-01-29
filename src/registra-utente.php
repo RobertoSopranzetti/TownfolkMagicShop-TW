@@ -1,6 +1,9 @@
 <?php
 require_once 'bootstrap.php';
 
+$isVenditore = isset($_GET['venditore']) && $_GET['venditore'] == 1;
+$id_ruolo = $isVenditore ? 2 : 1; // Ruolo predefinito per un nuovo venditore o cliente
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = $_POST['nome'];
     $cognome = $_POST['cognome'];
@@ -12,10 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($password !== $conferma_password) {
         $templateParams["erroreregistrazione"] = "Le password non coincidono.";
     } else {
-        $id_ruolo = 2; // Ruolo predefinito per un nuovo cliente
         $userId = $dbh->registerUser($nome, $cognome, $email, $username, password_hash($password, PASSWORD_BCRYPT), $id_ruolo);
         if ($userId) {
-            header("Location: login.php");
+            registerLoggedUser($userId);
+            header("Location: index.php");
             exit();
         } else {
             $templateParams["erroreregistrazione"] = "Errore durante la registrazione. Riprova.";
@@ -23,9 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$templateParams["titolo"] = "Registrazione Cliente";
+$templateParams["titolo"] = $isVenditore ? "Registrazione Venditore" : "Registrazione Cliente";
 $templateParams["nome"] = "register-form.php";
-$templateParams["isVenditore"] = false;
+$templateParams["isVenditore"] = $isVenditore;
 $templateParams["ruolo"] = isUserLoggedIn() ? $dbh->getRoleByUsername($_SESSION["username"])["ruolo"] : "cliente";
 require 'template/base.php';
 ?>
