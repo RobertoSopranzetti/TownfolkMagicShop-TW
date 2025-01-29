@@ -16,3 +16,15 @@ header nav a:hover {
     font-family: 'UnifrakturCook', Georgia, serif;
     font-size: 1.5rem;
 }
+
+@media (max-width: 992px) {
+    .form-label {
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+    .form-control::placeholder {
+        color: transparent;
+    }
+}
