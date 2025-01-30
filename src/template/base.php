@@ -64,11 +64,11 @@
         <?php if ($templateParams["ruolo"] == "venditore"): ?>
             <section>
                 <h2>Link Utili</h2>
-                <ul class="list-group">
-                    <li class="list-group-item"><a href="#">Gestisci notifiche</a></li>
-                    <li class="list-group-item"><a href="#">Gestisci ordini</a></li>
-                    <li class="list-group-item"><a href="gestisci-prodotti.php">Gestisci prodotti</a></li>
-                </ul>
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-primary">Gestisci notifiche</a>
+                    <a href="#" class="btn btn-primary">Gestisci ordini</a>
+                    <a href="gestisci-prodotti.php" class="btn btn-primary">Gestisci prodotti</a>
+                </div>
             </section>
         <?php else: ?>
             <section>
