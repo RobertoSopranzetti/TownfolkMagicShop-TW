@@ -34,9 +34,19 @@ function getUserIcon($ruolo)
     }
 }
 
-function getEmptyArticle()
+function getEmptyProduct()
 {
-    return array("idarticolo" => "", "titoloarticolo" => "", "imgarticolo" => "", "testoarticolo" => "", "anteprimaarticolo" => "", "categorie" => array());
+    return array(
+        "id" => "",
+        "titolo" => "",
+        "descrizione" => "",
+        "prezzo" => "",
+        "sconto" => "",
+        "quantita_disponibile" => "",
+        "id_categoria" => "",
+        "id_venditore" => "",
+        "immagine" => ""
+    );
 }
 
 function getAction($action)
@@ -57,7 +67,8 @@ function getAction($action)
     return $result;
 }
 
-function getRegistrationDetails($isVenditore) {
+function getRegistrationDetails($isVenditore)
+{
     $details = [];
     $details['titolo'] = $isVenditore ? "Un nuovo commerciante si unisce alla gilda!!" : "Un nuovo avventuriero si unisce alla gilda!!";
     $details['linkVenditore'] = !$isVenditore ? '<p class="text-center">Sei un <a href="registra-utente.php?venditore=1">venditore</a>?</p>' : '';
