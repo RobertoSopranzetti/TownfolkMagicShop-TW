@@ -11,27 +11,27 @@ $categorie = $templateParams["categorie"];
         <div class="mb-3">
             <label for="nomeProdotto" class="form-label">Nome del Prodotto</label>
             <input type="text" class="form-control" name="nomeProdotto" id="nomeProdotto"
-                value="<?php echo $prodotto['titolo']; ?>" placeholder="Nome">
+                value="<?php echo $prodotto['titolo']; ?>" placeholder="Nome" aria-label="Nome del Prodotto">
         </div>
         <div class="mb-3">
             <label for="descrizione" class="form-label">Descrizione</label>
             <textarea class="form-control" name="descrizione" id="descrizione"
-                rows="3"><?php echo $prodotto['descrizione']; ?></textarea>
+                rows="3" aria-label="Descrizione del Prodotto"><?php echo $prodotto['descrizione']; ?></textarea>
         </div>
         <div class="mb-3">
             <label for="prezzo" class="form-label">Prezzo</label>
             <input type="number" class="form-control" name="prezzo" id="prezzo" step="0.01"
-                value="<?php echo $prodotto['prezzo']; ?>" placeholder="Prezzo">
+                value="<?php echo $prodotto['prezzo']; ?>" placeholder="Prezzo" aria-label="Prezzo del Prodotto">
         </div>
         <div class="mb-3">
             <label for="sconto" class="form-label">Sconto</label>
             <input type="number" class="form-control" name="sconto" id="sconto" step="0.01"
-                value="<?php echo $prodotto['sconto']; ?>" placeholder="Sconto">
+                value="<?php echo $prodotto['sconto']; ?>" placeholder="Sconto" aria-label="Sconto del Prodotto">
         </div>
         <div class="mb-3">
             <label for="quantita" class="form-label">Quantità Disponibile</label>
             <input type="number" class="form-control" name="quantita" id="quantita"
-                value="<?php echo $prodotto['quantita_disponibile']; ?>" placeholder="Quantità">
+                value="<?php echo $prodotto['quantita_disponibile']; ?>" placeholder="Quantità" aria-label="Quantità Disponibile">
         </div>
         <div class="mb-3">
             <label class="form-label">Categoria</label>
@@ -39,7 +39,8 @@ $categorie = $templateParams["categorie"];
                 <?php foreach ($categorie as $categoria): ?>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="categoria"
-                            id="categoria_<?php echo $categoria["id"]; ?>" value="<?php echo $categoria["id"]; ?>" <?php echo $prodotto['id_categoria'] == $categoria["id"] ? 'checked' : ''; ?>>
+                            id="categoria_<?php echo $categoria["id"]; ?>" value="<?php echo $categoria["id"]; ?>"
+                            <?php echo $prodotto['id_categoria'] == $categoria["id"] ? 'checked' : ''; ?> aria-label="Categoria <?php echo $categoria["nome"]; ?>">
                         <label class="form-check-label" for="categoria_<?php echo $categoria["id"]; ?>">
                             <?php echo $categoria["nome"]; ?>
                         </label>
@@ -49,10 +50,10 @@ $categorie = $templateParams["categorie"];
         </div>
         <div class="mb-3">
             <label for="immagine" class="form-label">Immagine del Prodotto</label>
-            <input type="file" class="form-control" name="immagine" id="immagine">
+            <input type="file" class="form-control" name="immagine" id="immagine" aria-label="Immagine del Prodotto">
             <?php if ($azione == 'Modifica' && !empty($prodotto['immagine'])): ?>
                 <div class="mt-3">
-                    <img src="<?php echo UPLOAD_DIR . $prodotto['immagine']; ?>" alt="" class="img-thumbnail"
+                    <img src="<?php echo UPLOAD_DIR . $prodotto['immagine']; ?>" alt="Immagine del Prodotto" class="img-thumbnail"
                         style="max-width: 150px;">
                 </div>
             <?php endif; ?>
