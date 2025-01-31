@@ -23,7 +23,7 @@ class DatabaseHelper
 
     public function getCategories()
     {
-        $stmt = $this->db->prepare("SELECT * FROM categorie");
+        $stmt = $this->db->prepare("SELECT nome, descrizione FROM categorie");
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -42,7 +42,7 @@ class DatabaseHelper
 
     public function getProducts($n = -1)
     {
-        $query = "SELECT id, titolo, immagine, descrizione, prezzo, sconto, quantita_disponibile, data_creazione FROM prodotti ORDER BY data_creazione DESC";
+        $query = "SELECT * FROM prodotti ORDER BY data_creazione DESC";
         if ($n > 0) {
             $query .= " LIMIT ?";
         }
@@ -77,7 +77,7 @@ class DatabaseHelper
 
     public function getProductById($id)
     {
-        $query = "SELECT id, titolo, immagine, descrizione, prezzo, sconto, quantita_disponibile, data_creazione FROM prodotti WHERE id=?";
+        $query = "SELECT * FROM prodotti WHERE id=?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -88,9 +88,7 @@ class DatabaseHelper
 
     public function getProductsByCategory($idcategory)
     {
-        $query = "SELECT id, titolo, immagine, descrizione, prezzo, sconto, quantita_disponibile, data_creazione 
-                FROM prodotti
-                WHERE id_categoria=?";
+        $query = "SELECT * FROM prodotti WHERE id_categoria=?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $idcategory);
         $stmt->execute();
@@ -99,11 +97,30 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getProductsByPriceRange($minPrice, $maxPrice)
+    {
+        $query = "SELECT * FROM prodotti WHERE prezzo BETWEEN ? AND ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('dd', $minPrice, $maxPrice);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getLimitedProducts(){
+        $stmt = $this->db->prepare("SELECT * FROM ordini WHERE edizione_limitata = 1");
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getProductsByUserId($userId)
     {
-        $query = "SELECT id, titolo, immagine, descrizione, prezzo, sconto, quantita_disponibile, data_creazione 
-                FROM prodotti
-                WHERE id_utente=?";
+        $query = "SELECT id, titolo, immagine, descrizione, prezzo, sconto, quantita_disponibile, data_creazione
+            FROM prodotti
+            WHERE id_venditore=?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $userId);
         $stmt->execute();
@@ -112,11 +129,22 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_utente, $immagine)
+    public function getProductByIdAndSeller($productId, $sellerId)
     {
-        $query = "INSERT INTO prodotti (titolo, descrizione, prezzo, sconto, quantita_disponibile, id_categoria, id_utente, immagine) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "SELECT * FROM prodotti WHERE id = ? AND id_venditore = ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ssdiisis', $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_utente, $immagine);
+        $stmt->bind_param('ii', $productId, $sellerId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_assoc();
+    }
+
+    public function insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_venditore, $immagine)
+    {
+        $query = "INSERT INTO prodotti (titolo, descrizione, prezzo, sconto, quantita_disponibile, id_categoria, id_venditore, immagine) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('ssdiisis', $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_venditore, $immagine);
         $stmt->execute();
 
         return $stmt->insert_id;
@@ -278,6 +306,24 @@ class DatabaseHelper
         $result = $stmt->get_result();
 
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getMinPrice()
+    {
+        $stmt = $this->db->prepare("SELECT MIN(prezzo) as min_price FROM prodotti WHERE quantita_disponibile > 0");
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_assoc()["min_price"];
+    }
+
+    public function getMaxPrice()
+    {
+        $stmt = $this->db->prepare("SELECT MAX(prezzo) as max_price FROM prodotti WHERE quantita_disponibile > 0");
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_assoc()["max_price"];
     }
 }
 ?>

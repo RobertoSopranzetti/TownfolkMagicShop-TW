@@ -84,6 +84,25 @@ function updateQueryParams($paramsToUpdate)
     return array_merge($_GET, $paramsToUpdate);
 }
 
+
+function filterProducts($prodotti, $selectedCategory, $limitedEdition)
+{
+    if ($selectedCategory) {
+        $prodotti = array_filter($prodotti, function ($prodotto) use ($selectedCategory) {
+            return $prodotto['id_categoria'] == $selectedCategory;
+        });
+    }
+
+    if ($limitedEdition) {
+        $prodotti = array_filter($prodotti, function ($prodotto) {
+            return $prodotto['edizione_limitata'] == 1;
+        });
+    }
+
+    return $prodotti;
+}
+
+
 function uploadImage($path, $image)
 {
     $imageName = basename($image["name"]);
