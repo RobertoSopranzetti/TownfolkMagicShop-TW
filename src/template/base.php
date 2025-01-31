@@ -17,7 +17,6 @@
         endforeach;
     endif;
     ?>
-
 </head>
 
 <body>
@@ -53,47 +52,52 @@
             </div>
         </nav>
     </header>
-    <main>
-        <?php
-        if (isset($templateParams["nome"])) {
-            require($templateParams["nome"]);
-        }
-        ?>
-    </main>
-    <aside class="container mt-5 mb-5 p-3 border rounded bg-light">
-        <?php if ($templateParams["ruolo"] == "venditore"): ?>
-            <section>
-                <h2>Link Utili</h2>
-                <div class="d-grid gap-2">
-                    <a href="#" class="btn btn-primary">Gestisci notifiche</a>
-                    <a href="#" class="btn btn-primary">Gestisci ordini</a>
-                    <a href="gestisci-prodotti.php" class="btn btn-primary">Gestisci prodotti</a>
-                </div>
-            </section>
-        <?php else: ?>
-            <section>
-                <h2>Ti potrebbe interessare anche...</h2>
-                <div class="row">
-                    <?php foreach ($templateParams["prodottiCasuali"] as $prodottocasuale): ?>
-                        <div class="col-12 col-md-6 mb-3">
-                            <div class="card">
-                                <img src="<?php echo UPLOAD_DIR . $prodottocasuale["immagine"]; ?>" class="card-img-top"
-                                    alt="<?php echo $prodottocasuale["titolo"]; ?>">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?php echo $prodottocasuale["titolo"]; ?></h5>
-                                    <a href="prodotto.php?id=<?php echo $prodottocasuale["id"]; ?>"
-                                        class="btn btn-primary">Visualizza</a>
-                                </div>
-                            </div>
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <main class="col-12 col-md-8 order-md-1">
+                <?php
+                if (isset($templateParams["nome"])) {
+                    require($templateParams["nome"]);
+                }
+                ?>
+            </main>
+            <aside class="col-12 col-md-4 order-md-2 mt-5 mt-md-0 p-3 border rounded bg-light">
+                <?php if ($templateParams["ruolo"] == "venditore"): ?>
+                    <section>
+                        <h2 class="text-center">Link Utili</h2>
+                        <div class="d-grid gap-2">
+                            <a href="notifiche.php" class="btn btn-primary">Gestisci notifiche</a>
+                            <a href="ordini.php" class="btn btn-primary">Gestisci ordini</a>
+                            <a href="dashboard.php" class="btn btn-primary">Gestisci prodotti</a>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            </section>
-        <?php endif; ?>
-    </aside>
+                    </section>
+                <?php else: ?>
+                    <section>
+                        <h2 class="text-center">Ti potrebbe interessare anche...</h2>
+                        <div class="row">
+                            <?php foreach ($templateParams["prodottiCasuali"] as $prodottocasuale): ?>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <div class="card">
+                                        <img src="<?php echo UPLOAD_DIR . $prodottocasuale["immagine"]; ?>" class="card-img-top"
+                                            alt="<?php echo $prodottocasuale["titolo"]; ?>">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><?php echo $prodottocasuale["titolo"]; ?></h5>
+                                            <a href="prodotto.php?id=<?php echo $prodottocasuale["id"]; ?>"
+                                                class="btn btn-primary">Visualizza</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
+                <?php endif; ?>
+            </aside>
+        </div>
+    </div>
     <footer class="bg-primary text-white text-center py-1">
         <p class="footer-text"> Townfolk Magic Shop - <?php echo date("Y"); ?></p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
