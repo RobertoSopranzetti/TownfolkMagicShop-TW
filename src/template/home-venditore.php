@@ -36,7 +36,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Aggiungi Prodotto</h5>
                     <p class="card-text">Aggiungi nuovi prodotti al tuo inventario.</p>
-                    <a href="aggiungi-prodotto.php" class="btn btn-danger">Aggiungi Prodotto</a>
+                    <a href="gestisci-prodotti.php?action=1" class="btn btn-danger">Aggiungi Prodotto</a>
                 </div>
             </div>
         </div>
