@@ -38,7 +38,8 @@
                             <option
                                 value="<?php echo buildQuery('Dashboard.php', updateQueryParams(['categoria' => $categoria["id"]])); ?>"
                                 <?php echo $templateParams["selectedCategory"] == $categoria["id"] ? 'selected' : ''; ?>>
-                                <?php echo $categoria["nome"]; ?></option>
+                                <?php echo $categoria["nome"]; ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
