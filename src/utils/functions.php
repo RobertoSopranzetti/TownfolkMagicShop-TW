@@ -74,6 +74,16 @@ function getRegistrationDetails($isVenditore)
     $details['linkVenditore'] = !$isVenditore ? '<p class="text-center">Sei un <a href="registra-utente.php?venditore=1">venditore</a>?</p>' : '';
     return $details;
 }
+function buildQuery($baseUrl, $params)
+{
+    return $baseUrl . '?' . http_build_query($params);
+}
+
+function updateQueryParams($paramsToUpdate)
+{
+    return array_merge($_GET, $paramsToUpdate);
+}
+
 function uploadImage($path, $image)
 {
     $imageName = basename($image["name"]);
