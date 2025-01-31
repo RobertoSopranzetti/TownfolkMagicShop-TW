@@ -4,42 +4,41 @@
             <div class="col-12 col-md-3">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h2>Filtri</h2>
-                    <a href="Dashboard.php" class="text-danger">Rimuovi tutto</a>
+                    <a href="dashboard.php" class="text-danger">Rimuovi tutto</a>
                 </div>
                 <div class="mb-3">
                     <?php if ($templateParams["selectedCategory"]): ?>
                         <button class="btn btn-outline-primary me-2 mb-2">
                             Categoria: <?php echo $templateParams["selectedCategory"]; ?> <a
-                                href="<?php echo buildQuery('Dashboard.php', updateQueryParams(['categoria' => ''])); ?>"
+                                href="<?php echo buildQuery('dashboard.php', updateQueryParams(['categoria' => ''])); ?>"
                                 class="ms-1">&times;</a>
                         </button>
                     <?php endif; ?>
-                    <?php if ($templateParams["selectedMinPrice"] != $templateParams["prezzoMin"] || $templateParams["selectedMaxPrice"] != $templateParams["prezzoMax"]): ?>
+                    <?php if ($templateParams["selectedMaxPrice"] != $templateParams["prezzoMax"]): ?>
                         <button class="btn btn-outline-primary me-2 mb-2">
-                            Prezzo: <?php echo $templateParams["selectedMinPrice"]; ?> -
+                            Prezzo: <?php echo $templateParams["prezzoMin"]; ?> -
                             <?php echo $templateParams["selectedMaxPrice"]; ?> € <a
-                                href="<?php echo buildQuery('Dashboard.php', updateQueryParams(['prezzoMin' => $templateParams["prezzoMin"], 'prezzoMax' => $templateParams["prezzoMax"]])); ?>"
+                                href="<?php echo buildQuery('dashboard.php', updateQueryParams(['prezzoMin' => $templateParams["prezzoMin"], 'prezzoMax' => $templateParams["prezzoMax"]])); ?>"
                                 class="ms-1">&times;</a>
                         </button>
                     <?php endif; ?>
-                    <?php if ($templateParams["freeShipping"]): ?>
+                    <?php if ($templateParams["limitedEdition"]): ?>
                         <button class="btn btn-outline-primary me-2 mb-2">
-                            Spedizione Gratuita <a
-                                href="<?php echo buildQuery('Dashboard.php', updateQueryParams(['spedizioneGratuita' => ''])); ?>"
+                            Edizione Limitata <a
+                                href="<?php echo buildQuery('dashboard.php', updateQueryParams(['edizioneLimitata' => ''])); ?>"
                                 class="ms-1">&times;</a>
                         </button>
                     <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <select class="form-select" onchange="location = this.value;">
-                        <option value="Dashboard.php" <?php echo !$templateParams["selectedCategory"] ? 'selected' : ''; ?>>
+                        <option value="dashboard.php" <?php echo !$templateParams["selectedCategory"] ? 'selected' : ''; ?>>
                             Seleziona Categoria</option>
                         <?php foreach ($templateParams["categorie"] as $categoria): ?>
                             <option
-                                value="<?php echo buildQuery('Dashboard.php', updateQueryParams(['categoria' => $categoria["id"]])); ?>"
+                                value="<?php echo buildQuery('dashboard.php', updateQueryParams(['categoria' => $categoria["id"]])); ?>"
                                 <?php echo $templateParams["selectedCategory"] == $categoria["id"] ? 'selected' : ''; ?>>
-                                <?php echo $categoria["nome"]; ?>
-                            </option>
+                                <?php echo $categoria["nome"]; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -48,16 +47,16 @@
                     <input type="range" class="form-range" min="<?php echo $templateParams["prezzoMin"]; ?>"
                         max="<?php echo $templateParams["prezzoMax"]; ?>"
                         value="<?php echo $templateParams["selectedMaxPrice"]; ?>" id="priceRange"
-                        onchange="location = '<?php echo buildQuery('Dashboard.php', updateQueryParams(['prezzoMin' => $templateParams["prezzoMin"], 'prezzoMax' => ''])); ?>&prezzoMax=' + this.value;">
+                        onchange="location = '<?php echo buildQuery('dashboard.php', updateQueryParams(['prezzoMin' => $templateParams["prezzoMin"], 'prezzoMax' => ''])); ?>&prezzoMax=' + this.value;">
                     <div class="d-flex justify-content-between">
                         <span><?php echo $templateParams["prezzoMin"]; ?> €</span>
                         <span><?php echo $templateParams["prezzoMax"]; ?> €</span>
                     </div>
                 </div>
                 <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="freeShipping" <?php echo $templateParams["freeShipping"] ? 'checked' : ''; ?>
-                        onchange="location = '<?php echo buildQuery('Dashboard.php', updateQueryParams(['spedizioneGratuita' => $templateParams["freeShipping"] ? '' : '1'])); ?>';">
-                    <label class="form-check-label" for="freeShipping">Spedizione Gratuita</label>
+                    <input type="checkbox" class="form-check-input" id="limitedEdition" <?php echo $templateParams["limitedEdition"] ? 'checked' : ''; ?>
+                        onchange="location = '<?php echo buildQuery('dashboard.php', updateQueryParams(['edizioneLimitata' => $templateParams["limitedEdition"] ? '' : '1'])); ?>';">
+                    <label class="form-check-label" for="limitedEdition">Edizione Limitata</label>
                 </div>
             </div>
         <?php endif; ?>
