@@ -20,7 +20,11 @@ $templateParams["limitedEdition"] = $limitedEdition;
 
 // Logica per filtrare i prodotti
 if ($templateParams["ruolo"] == "venditore") {
-    $prodotti = $dbh->getProductsByUserId($_SESSION["idutente"]);
+    if ($_GET['shortage'] == 1) {
+        $prodotti = $dbh->getShortageProducts($_SESSION["idutente"]);
+    } else {
+        $prodotti = $dbh->getProductsByUserId($_SESSION["idutente"]);
+    }
 } else {
     $prodotti = $dbh->getProductsByPriceRange($minPrice, $selectedMaxPrice);
     $prodotti = filterProducts($prodotti, $selectedCategory, $limitedEdition);

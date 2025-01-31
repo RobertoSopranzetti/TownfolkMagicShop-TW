@@ -15,6 +15,7 @@ $quantita = htmlspecialchars($_POST["quantita"]);
 $categoria = htmlspecialchars($_POST["categoria"]);
 $id_utente = $_SESSION["idutente"];
 $id_prodotto = isset($_POST["id"]) ? $_POST["id"] : null;
+$edizione_limitata = isset($_POST['edizione_limitata']) ? 1 : 0;
 
 $immagine = null;
 if (isset($_FILES['immagine']) && $_FILES['immagine']['error'] == UPLOAD_ERR_OK) {
@@ -36,19 +37,21 @@ if (isset($_FILES['immagine']) && $_FILES['immagine']['error'] == UPLOAD_ERR_OK)
 }
 
 if ($azione == 'Inserisci') {
-    $id_prodotto = $dbh->insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $id_utente, $immagini);
+    $id_prodotto = $dbh->insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $id_utente, $immagini, $edizione_limitata);
     if ($id_prodotto) {
         $msg = "Inserimento completato correttamente!";
     } else {
         $msg = "Errore nell'inserimento!";
     }
 } elseif ($azione == 'Modifica') {
-    $dbh->updateProduct($id_prodotto, $titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $immagini);
+    $dbh->updateProduct($id_prodotto, $titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $immagini, $edizione_limitata);
     $msg = "Modifica completata correttamente!";
 } elseif ($azione == 'Cancella') {
     $dbh->deleteProduct($id_prodotto);
     $msg = "Cancellazione completata correttamente!";
 }
 
-header("location: admin.php?formmsg=" . urlencode($msg));
+// Reindirizza alla pagina gestisci-prodotti.php con un messaggio di feedback
+header("location: gestisci-prodotti.php?formmsg=" . urlencode($msg));
 exit();
+?>

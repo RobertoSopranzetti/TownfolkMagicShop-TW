@@ -38,7 +38,8 @@
                             <option
                                 value="<?php echo buildQuery('dashboard.php', updateQueryParams(['categoria' => $categoria["id"]])); ?>"
                                 <?php echo $templateParams["selectedCategory"] == $categoria["id"] ? 'selected' : ''; ?>>
-                                <?php echo $categoria["nome"]; ?></option>
+                                <?php echo $categoria["nome"]; ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -71,16 +72,18 @@
                                 <h5 class="card-title"><?php echo $prodotto["nome"]; ?></h5>
                                 <p class="card-text"><?php echo number_format($prodotto["prezzo"], 2); ?> €</p>
                                 <?php if ($templateParams["ruolo"] == "venditore"): ?>
-                                    <a href="gestisci-prodotti.php?action=2&id=<?php echo $prodotto["id"]; ?>"
-                                        class="btn btn-primary">Modifica</a>
+                                    <?php if ($prodotto["edizione_limitata"] != 1): ?>
+                                        <a href="gestisci-prodotti.php?action=2&id=<?php echo $prodotto["id"]; ?>"
+                                            class="btn btn-primary">Modifica</a>
+                                    <?php endif; ?>
                                     <a href="gestisci-prodotti.php?action=3&id=<?php echo $prodotto["id"]; ?>"
-                                        class="btn btn-danger">Elimina</a>
+                                                class="btn btn-danger">Elimina</a>
                                 <?php endif; ?>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                            </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
-    </div>
 </section>

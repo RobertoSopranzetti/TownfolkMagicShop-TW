@@ -5,6 +5,11 @@ $categorie = $templateParams["categorie"];
 ?>
 <form action="processa-prodotto.php" method="POST" enctype="multipart/form-data">
     <h2>Gestisci Prodotto</h2>
+    <?php if (!empty($templateParams["formmsg"])): ?>
+        <div class="alert alert-info" role="alert">
+            <?php echo $templateParams["formmsg"]; ?>
+        </div>
+    <?php endif; ?>
     <?php if ($prodotto == null): ?>
         <p>Prodotto non trovato</p>
     <?php else: ?>
@@ -57,6 +62,11 @@ $categorie = $templateParams["categorie"];
                         style="max-width: 150px;">
                 </div>
             <?php endif; ?>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="edizione_limitata" id="edizione_limitata" value="1"
+                <?php echo $prodotto['edizione_limitata'] ? 'checked' : ''; ?> aria-label="Edizione Limitata">
+            <label class="form-check-label" for="edizione_limitata">Edizione Limitata</label>
         </div>
         <div class="mb-3">
             <button type="submit" class="btn btn-primary"><?php echo $azione; ?> Prodotto</button>

@@ -108,8 +108,19 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getLimitedProducts(){
+    public function getLimitedProducts()
+    {
         $stmt = $this->db->prepare("SELECT * FROM ordini WHERE edizione_limitata = 1");
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getShortageProducts($id)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM ordini WHERE quantita_disponibile = 0 AND id_venditore = ?");
+        $stmt->bind_param('i', $id);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -140,21 +151,21 @@ class DatabaseHelper
         return $result->fetch_assoc();
     }
 
-    public function insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_venditore, $immagine)
+    public function insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_venditore, $immagine, $edizione_limitata)
     {
-        $query = "INSERT INTO prodotti (titolo, descrizione, prezzo, sconto, quantita_disponibile, id_categoria, id_venditore, immagine) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO prodotti (titolo, descrizione, prezzo, sconto, quantita_disponibile, id_categoria, id_venditore, immagine, edizione_limitata) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ssdiisis', $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_venditore, $immagine);
+        $stmt->bind_param('ssdiisisi', $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_venditore, $immagine, $edizione_limitata);
         $stmt->execute();
 
         return $stmt->insert_id;
     }
 
-    public function updateProduct($id, $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $immagine)
+    public function updateProduct($id, $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $immagine, $edizione_limitata)
     {
-        $query = "UPDATE prodotti SET titolo = ?, descrizione = ?, prezzo = ?, sconto = ?, quantita_disponibile = ?, id_categoria = ?, immagine = ? WHERE id = ?";
+        $query = "UPDATE prodotti SET titolo = ?, descrizione = ?, prezzo = ?, sconto = ?, quantita_disponibile = ?, id_categoria = ?, immagine = ?, edizione_limitata = ? WHERE id = ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ssdiissi', $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $immagine, $id);
+        $stmt->bind_param('ssdiissii', $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $immagine, $edizione_limitata, $id);
 
         return $stmt->execute();
     }

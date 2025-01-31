@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Prodotti in Esaurimento</h5>
                     <p class="card-text">3 prodotti stanno per esaurirsi.</p>
-                    <a href="prodotti-esaurimento.php" class="btn btn-danger">Visualizza Prodotti</a>
+                    <a href="dashboard.php?shortage=1" class="btn btn-danger">Visualizza Prodotti</a>
                 </div>
             </div>
         </div>

@@ -45,7 +45,8 @@ function getEmptyProduct()
         "quantita_disponibile" => "",
         "id_categoria" => "",
         "id_venditore" => "",
-        "immagine" => ""
+        "immagine" => "",
+        "edizione_limitata" => ""
     );
 }
 
