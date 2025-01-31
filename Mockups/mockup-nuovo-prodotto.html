@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Prodotto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-5">
         <section class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Gestione Prodotto</h3>
-            </div>
             <div class="panel-body">
-                <form action="processa-prodotto.php" class="form-horizontal" role="form" method="POST" enctype="multipart/form-data">
+                <form action="processa-prodotto.php" method="POST" enctype="multipart/form-data">
+                    <h2>Gestisci Prodotto</h2>
                     <div class="mb-3">
                         <label for="nomeProdotto" class="form-label">Nome del Prodotto</label>
-                        <input type="text" class="form-control" name="nomeProdotto" id="nomeProdotto" placeholder="Nome">
+                        <input type="text" class="form-control" name="nomeProdotto" id="nomeProdotto"
+                            placeholder="Nome">
                     </div>
                     <div class="mb-3">
                         <label for="descrizione" class="form-label">Descrizione</label>
@@ -24,34 +25,66 @@
                     </div>
                     <div class="mb-3">
                         <label for="prezzo" class="form-label">Prezzo</label>
-                        <input type="number" class="form-control" name="prezzo" id="prezzo" step="0.01" placeholder="Prezzo">
+                        <input type="number" class="form-control" name="prezzo" id="prezzo" step="0.01"
+                            placeholder="Prezzo">
                     </div>
                     <div class="mb-3">
                         <label for="sconto" class="form-label">Sconto</label>
-                        <input type="number" class="form-control" name="sconto" id="sconto" step="0.01" placeholder="Sconto">
+                        <input type="number" class="form-control" name="sconto" id="sconto" step="0.01"
+                            placeholder="Sconto">
                     </div>
                     <div class="mb-3">
                         <label for="quantita" class="form-label">Quantità Disponibile</label>
                         <input type="number" class="form-control" name="quantita" id="quantita" placeholder="Quantità">
                     </div>
                     <div class="mb-3">
-                        <label for="categoria" class="form-label">Categoria</label>
-                        <select class="form-select" name="categoria" id="categoria">
-                            <option value="">Seleziona Categoria</option>
-                            <!-- Aggiungi qui le opzioni delle categorie -->
-                        </select>
+                        <label class="form-label">Categoria</label>
+                        <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="categoria" id="categoria_Manuali"
+                                    value="Manuali">
+                                <label class="form-check-label" for="categoria_Manuali">Manuali</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="categoria" id="categoria_Dadi"
+                                    value="Dadi">
+                                <label class="form-check-label" for="categoria_Dadi">Dadi</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="categoria" id="categoria_Accessori"
+                                    value="Accessori">
+                                <label class="form-check-label" for="categoria_Accessori">Accessori</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="categoria" id="categoria_Vestiario"
+                                    value="Vestiario">
+                                <label class="form-check-label" for="categoria_Vestiario">Vestiario</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="categoria" id="categoria_Casa"
+                                    value="Casa">
+                                <label class="form-check-label" for="categoria_Casa">Casa</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="immagini" class="form-label">Immagini del Prodotto</label>
                         <input type="file" class="form-control" name="immagini[]" id="immagini" multiple>
+                        <div class="mt-3">
+                            <img src="path/to/image1.jpg" alt="" class="img-thumbnail" style="max-width: 150px;">
+                            <img src="path/to/image2.jpg" alt="" class="img-thumbnail" style="max-width: 150px;">
+                        </div>
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Invia</button>
                     </div>
+                    <input type="hidden" name="id" value="1">
+                    <input type="hidden" name="azione" value="Modifica">
                 </form>
             </div>
         </section>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
