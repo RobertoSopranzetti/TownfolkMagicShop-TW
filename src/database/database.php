@@ -180,20 +180,30 @@ class DatabaseHelper
         return $stmt->affected_rows > 0;
     }
 
-    public function insertCartItem($id_carrello, $id_prodotto, $quantita, $prezzo)
+    public function addToCart($id_utente, $id_prodotto, $quantita)
     {
-        $query = "INSERT INTO articoli_carrello (id_carrello, id_prodotto, quantita, prezzo) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO articoli_carrello (id_carrello, id_prodotto, quantita, prezzo) VALUES ((SELECT id FROM carrelli WHERE id_utente = ? AND id_stato_carrello = 1), ?, ?, (SELECT prezzo FROM prodotti WHERE id = ?)) ON DUPLICATE KEY UPDATE quantita = quantita + VALUES(quantita)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('iiid', $id_carrello, $id_prodotto, $quantita, $prezzo);
+        $stmt->bind_param('iiii', $id_utente, $id_prodotto, $quantita, $id_prodotto);
         return $stmt->execute();
     }
 
-    public function deleteCartItem($id)
+    public function removeFromCart($id_utente, $id_prodotto)
     {
-        $query = "DELETE FROM articoli_carrello WHERE id = ?";
+        $query = "DELETE FROM articoli_carrello WHERE id_carrello = (SELECT id FROM carrelli WHERE id_utente = ? AND id_stato_carrello = 1) AND id_prodotto = ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i', $id);
+        $stmt->bind_param('ii', $id_utente, $id_prodotto);
         return $stmt->execute();
+    }
+
+    public function getProductsInCart($id_utente)
+    {
+        $query = "SELECT p.*, ac.quantita FROM prodotti p JOIN articoli_carrello ac ON p.id = ac.id_prodotto JOIN carrelli c ON ac.id_carrello = c.id WHERE c.id_utente = ? AND c.id_stato_carrello = 1";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $id_utente);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     public function insertOrderItem($id_ordine, $id_prodotto, $quantita, $prezzo)
