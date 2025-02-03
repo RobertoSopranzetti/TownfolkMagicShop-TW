@@ -8,7 +8,7 @@
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Ordini in Sospeso</h5>
-                    <p class="card-text">Hai 2 ordini in sospeso da elaborare.</p>
+                    <p class="card-text">Hai <?php echo $templateParams["ordiniInSospeso"] ?> ordini in sospeso da elaborare.</p>
                     <a href="ordini.php" class="btn btn-danger">Vai agli Ordini</a>
                 </div>
             </div>
@@ -17,7 +17,7 @@
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Notifiche Recenti</h5>
-                    <p class="card-text">Hai 5 nuove notifiche.</p>
+                    <p class="card-text">Hai <?php echo $templateParams["notificheNuove"] ?> nuove notifiche.</p>
                     <a href="notifiche.php" class="btn btn-danger">Visualizza Notifiche</a>
                 </div>
             </div>
@@ -26,8 +26,8 @@
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Prodotti in Esaurimento</h5>
-                    <p class="card-text">3 prodotti stanno per esaurirsi.</p>
-                    <a href="dashboard.php?shortage=1" class="btn btn-danger">Visualizza Prodotti</a>
+                    <p class="card-text"><?php echo $templateParams["prodottiInEsaurimento"] ?> prodotti stanno per esaurirsi.</p>
+                    <a href="dashboard.php?shortage=1" class="btn btn-danger">Visualizza Prodotti Esauriti</a>
                 </div>
             </div>
         </div>

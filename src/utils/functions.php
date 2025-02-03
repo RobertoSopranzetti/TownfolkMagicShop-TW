@@ -75,6 +75,7 @@ function getRegistrationDetails($isVenditore)
     $details['linkVenditore'] = !$isVenditore ? '<p class="text-center">Sei un <a href="registra-utente.php?venditore=1">venditore</a>?</p>' : '';
     return $details;
 }
+
 function buildQuery($baseUrl, $params)
 {
     return $baseUrl . '?' . http_build_query($params);
@@ -85,6 +86,24 @@ function updateQueryParams($paramsToUpdate)
     return array_merge($_GET, $paramsToUpdate);
 }
 
+function getPendingOrders($orders){
+    $pendingOrders = array_filter($orders, function ($order) {
+        return $order['id_stato_ordine'] == 1;
+    });
+    return count($pendingOrders);}
+
+function getNewNotifications($notifications)
+{
+    $newNotifications = array_filter($notifications, function ($notification) {
+        return $notification['id_stato_notifica'] == 1;
+    });
+    return count($newNotifications);
+}
+
+function getShortageProducts($products)
+{
+    return count($products);
+}
 
 function filterProducts($prodotti, $selectedCategory, $limitedEdition)
 {
