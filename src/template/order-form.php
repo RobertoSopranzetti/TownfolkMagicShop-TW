@@ -31,7 +31,8 @@
             <input type="hidden" name="id" value="<?php echo $templateParams["ordine"]["id"]; ?>">
             <div class="mb-3">
                 <label for="stato_ordine" class="form-label">Stato Ordine</label>
-                <select class="form-select" id="stato_ordine" name="stato_ordine">
+                <select class="form-select" id="stato_ordine" name="stato_ordine"
+                    aria-label="Seleziona stato dell'ordine">
                     <option value="In elaborazione" <?php echo $templateParams["ordine"]["status"] == "In elaborazione" ? "selected" : ""; ?>>In elaborazione</option>
                     <option value="Spedito" <?php echo $templateParams["ordine"]["status"] == "Spedito" ? "selected" : ""; ?>>Spedito</option>
                     <option value="Consegnato" <?php echo $templateParams["ordine"]["status"] == "Consegnato" ? "selected" : ""; ?>>Consegnato</option>
