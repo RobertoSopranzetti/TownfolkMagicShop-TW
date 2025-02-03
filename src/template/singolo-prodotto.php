@@ -20,7 +20,7 @@
                     <input type="color" id="colorPicker" name="colorPicker" class="form-control form-control-color me-4">
                     <label for="quantity" class="form-label me-2">Quantità:</label>
                     <input type="number" id="quantity" name="quantity" class="form-control quantity-input" min="1"
-                        value="1">
+                        max="<?php echo $prodotto["quantita"]; ?>" value="1">
                 </div>
                 <div class="d-flex align-items-center mb-3">
                     <p class="mb-0"><strong>Prezzo:</strong></p>
