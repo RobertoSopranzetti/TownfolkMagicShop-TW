@@ -202,6 +202,17 @@ class DatabaseHelper
         return $result->fetch_assoc();
     }
 
+    public function getSellerIdByProductId($productId)
+    {
+        $query = "SELECT id_venditore FROM prodotti WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $productId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row['id_venditore'];
+    }
+
     public function insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_venditore, $immagine, $edizione_limitata)
     {
         $query = "INSERT INTO prodotti (titolo, descrizione, prezzo, sconto, quantita_disponibile, id_categoria, id_venditore, immagine, edizione_limitata) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -226,7 +237,20 @@ class DatabaseHelper
         $query = "UPDATE prodotti SET quantita_disponibile = quantita_disponibile - ? WHERE id = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ii', $quantity, $productId);
-        return $stmt->execute();
+        $stmt->execute();
+
+        // Controlla se il prodotto è esaurito
+        $query = "SELECT id_venditore, quantita_disponibile, titolo FROM prodotti WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $productId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        if ($row['quantita_disponibile'] <= 0) {
+            $message = "Il prodotto '{$row['titolo']}' è esaurito.";
+            $this->sendNotification($row['id_venditore'], $message);
+        }
     }
 
     public function deleteProduct($id)
@@ -344,43 +368,6 @@ class DatabaseHelper
 
         return $result->fetch_assoc();
     }
-    public function getCarts()
-    {
-        $stmt = $this->db->prepare("SELECT * FROM carrelli");
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getCartById($id)
-    {
-        $stmt = $this->db->prepare("SELECT * FROM carrelli WHERE id=?");
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getNotifications()
-    {
-        $stmt = $this->db->prepare("SELECT * FROM notifiche");
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getNotificationById($id)
-    {
-        $stmt = $this->db->prepare("SELECT * FROM notifiche WHERE id=?");
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
 
     public function getUserNotifications($userId)
     {
@@ -393,6 +380,14 @@ class DatabaseHelper
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function sendNotification($userId, $message)
+    {
+        $query = "INSERT INTO notifiche (id_utente, messaggio, data_creazione, id_stato_notifica) VALUES (?, ?, NOW(), 1)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('is', $userId, $message);
+        return $stmt->execute();
     }
 
     public function markNotificationAsRead($notificationId, $userId)
