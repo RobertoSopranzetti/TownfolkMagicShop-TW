@@ -56,22 +56,64 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getOrders()
+    public function getOrderById($orderId)
     {
-        $stmt = $this->db->prepare("SELECT * FROM ordini");
+        $query = "SELECT o.id, o.data_ordine, so.nome AS status, o.consegna_prevista, o.spesa_complessiva,
+                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                        ao.quantita, ao.prezzo, u.nome AS cliente, p.id_venditore
+                FROM ordini o
+                JOIN articoli_ordine ao ON o.id = ao.id_ordine
+                JOIN prodotti p ON ao.id_prodotto = p.id
+                JOIN utenti u ON o.id_utente = u.id
+                JOIN stati_ordini so ON o.id_stato_ordine = so.id
+                WHERE o.id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $orderId);
         $stmt->execute();
         $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
 
+    public function updateOrderStatus($orderId, $newStatus)
+    {
+        $query = "UPDATE ordini SET id_stato_ordine = (SELECT id FROM stati_ordini WHERE nome = ?) WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('si', $newStatus, $orderId);
+        return $stmt->execute();
+    }
+
+    public function getOrdersByUserId($userId)
+    {
+        $query = "SELECT o.id, o.data_ordine, so.nome AS status, o.consegna_prevista, o.spesa_complessiva,
+                    p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                    ao.quantita, ao.prezzo
+            FROM ordini o
+            JOIN articoli_ordine ao ON o.id = ao.id_ordine
+            JOIN prodotti p ON ao.id_prodotto = p.id
+            JOIN stati_ordini so ON o.id_stato_ordine = so.id
+            WHERE o.id_utente = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getOrderById($id)
+    public function getOrdersBySellerId($sellerId)
     {
-        $stmt = $this->db->prepare("SELECT * FROM ordini WHERE id=?");
-        $stmt->bind_param('i', $id);
+        $query = "SELECT o.id, o.data_ordine, so.nome AS status, o.consegna_prevista, o.spesa_complessiva,
+                    p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                    ao.quantita, ao.prezzo, u.nome AS cliente
+            FROM ordini o
+            JOIN articoli_ordine ao ON o.id = ao.id_ordine
+            JOIN prodotti p ON ao.id_prodotto = p.id
+            JOIN utenti u ON o.id_utente = u.id
+            JOIN stati_ordini so ON o.id_stato_ordine = so.id
+            WHERE p.id_venditore = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $sellerId);
         $stmt->execute();
         $result = $stmt->get_result();
-
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
