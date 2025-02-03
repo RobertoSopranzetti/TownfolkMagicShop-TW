@@ -221,6 +221,14 @@ class DatabaseHelper
         return $stmt->execute();
     }
 
+    public function reduceProductQuantity($productId, $quantity)
+    {
+        $query = "UPDATE prodotti SET quantita_disponibile = quantita_disponibile - ? WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('ii', $quantity, $productId);
+        return $stmt->execute();
+    }
+
     public function deleteProduct($id)
     {
         $query = "DELETE FROM prodotti WHERE id = ?";
@@ -372,6 +380,43 @@ class DatabaseHelper
         $result = $stmt->get_result();
 
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getUserNotifications($userId)
+    {
+        $query = "SELECT n.messaggio, n.data_creazione, n.id_stato_notifica
+                FROM notifiche n
+                WHERE n.id_utente = ?
+                ORDER BY n.data_creazione DESC";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function markNotificationAsRead($notificationId, $userId)
+    {
+        $query = "UPDATE notifiche SET id_stato_notifica = 2 WHERE id = ? AND id_utente = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('ii', $notificationId, $userId);
+        return $stmt->execute();
+    }
+
+    public function markNotificationAsUnread($notificationId, $userId)
+    {
+        $query = "UPDATE notifiche SET id_stato_notifica = 1 WHERE id = ? AND id_utente = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('ii', $notificationId, $userId);
+        return $stmt->execute();
+    }
+
+    public function deleteNotification($notificationId, $userId)
+    {
+        $query = "DELETE FROM notifiche WHERE id = ? AND id_utente = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('ii', $notificationId, $userId);
+        return $stmt->execute();
     }
 
     public function getCartStatuses()
