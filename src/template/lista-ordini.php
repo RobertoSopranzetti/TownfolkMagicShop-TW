@@ -15,18 +15,17 @@
                             Ordine</a>
                     <?php endif; ?>
                 </div>
-                <?php foreach ($ordine["prodotti"] as $prodotto): ?>
-                    <div class="col-12 col-md-3 text-center">
-                        <img src="<?php echo UPLOAD_DIR . $prodotto["immagine"]; ?>" alt="Immagine del Prodotto"
-                            class="img-fluid mb-2">
-                        <a href="prodotto.php?id=<?php echo $prodotto["id"]; ?>" class="btn btn-link">Dettagli Prodotto</a>
-                    </div>
-                    <div class="col-12 col-md-9">
-                        <p><strong>Nome Prodotto:</strong> <?php echo $prodotto["nome"]; ?></p>
-                        <p><strong>Quantità:</strong> <?php echo $prodotto["quantita"]; ?></p>
-                        <p><strong>Prezzo:</strong> <?php echo number_format($prodotto["prezzo"], 2); ?> €</p>
-                    </div>
-                <?php endforeach; ?>
+                <div class="col-12 col-md-3 text-center">
+                    <img src="<?php echo UPLOAD_DIR . $ordine["prodotto_immagine"]; ?>" alt="Immagine del Prodotto"
+                        class="img-fluid mb-2">
+                    <a href="prodotto.php?id=<?php echo $ordine["prodotto_id"]; ?>" class="btn btn-link">Dettagli
+                        Prodotto</a>
+                </div>
+                <div class="col-12 col-md-9">
+                    <p><strong>Nome Prodotto:</strong> <?php echo $ordine["prodotto_nome"]; ?></p>
+                    <p><strong>Quantità:</strong> <?php echo $ordine["quantita"]; ?></p>
+                    <p><strong>Prezzo:</strong> <?php echo number_format($ordine["prezzo"], 2); ?> €</p>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>
