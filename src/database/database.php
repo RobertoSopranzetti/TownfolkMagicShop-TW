@@ -117,6 +117,15 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function createOrder($userId, $totale)
+    {
+        $query = "INSERT INTO ordini (id_utente, id_stato_ordine, data_ordine, spesa_complessiva) VALUES (?, 1, NOW(), ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('id', $userId, $totale);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
     public function getProductById($id)
     {
         $query = "SELECT * FROM prodotti WHERE id=?";
@@ -243,6 +252,27 @@ class DatabaseHelper
         $query = "SELECT p.*, ac.quantita FROM prodotti p JOIN articoli_carrello ac ON p.id = ac.id_prodotto JOIN carrelli c ON ac.id_carrello = c.id WHERE c.id_utente = ? AND c.id_stato_carrello = 1";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $id_utente);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function clearCart($userId)
+    {
+        $query = "DELETE FROM articoli_carrello WHERE id_carrello = (SELECT id FROM carrelli WHERE id_utente = ? AND id_stato_carrello = 1)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $userId);
+        return $stmt->execute();
+    }
+
+    public function getOrderItems($orderId)
+    {
+        $query = "SELECT p.titolo, ao.quantita, ao.prezzo
+                FROM articoli_ordine ao
+                JOIN prodotti p ON ao.id_prodotto = p.id
+                WHERE ao.id_ordine = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $orderId);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
