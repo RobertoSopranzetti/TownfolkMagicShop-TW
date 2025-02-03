@@ -23,7 +23,7 @@ class DatabaseHelper
 
     public function getCategories()
     {
-        $stmt = $this->db->prepare("SELECT nome, descrizione FROM categorie");
+        $stmt = $this->db->prepare("SELECT * FROM categorie");
         $stmt->execute();
         $result = $stmt->get_result();
 
