@@ -32,6 +32,7 @@ switch ($azione) {
         $templateParams["titolo"] = "TownfolkMagicShop - Carrello";
         $templateParams["nome"] = "shopping-cart.php";
         $templateParams["prodottiCarrello"] = $dbh->getProductsInCart($_SESSION["idutente"]);
+        $templateParams["prodottiCasuali"] = $dbh->getRandomProducts(2);
         require 'template/base.php';
         break;
 }

@@ -32,6 +32,8 @@ if ($templateParams["ruolo"] == "venditore") {
 
 $templateParams["prodotti"] = $prodotti;
 $templateParams["nome"] = "lista-prodotti.php";
+$templateParams["prodottiCasuali"] = $dbh->getRandomProducts(2);
+$templateParams["categorie"] = $dbh->getCategories();
 
 require 'template/base.php';
 ?>

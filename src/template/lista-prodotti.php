@@ -3,7 +3,7 @@
         <?php if ($templateParams["ruolo"] == "cliente"): ?>
             <div class="col-12 col-md-3">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2>Filtri</h2>
+                    <h2 class="me-3">Filtri</h2>
                     <a href="dashboard.php" class="text-danger">Rimuovi tutto</a>
                 </div>
                 <div class="mb-3">
@@ -31,7 +31,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="mb-3">
-                    <select class="form-select" onchange="location = this.value;">
+                    <select class="form-select w-100" style="min-width: 200px;" onchange="location = this.value;">
                         <option value="dashboard.php" <?php echo !$templateParams["selectedCategory"] ? 'selected' : ''; ?>>
                             Seleziona Categoria</option>
                         <?php foreach ($templateParams["categorie"] as $categoria): ?>
@@ -77,13 +77,13 @@
                                             class="btn btn-primary">Modifica</a>
                                     <?php endif; ?>
                                     <a href="gestisci-prodotti.php?action=3&id=<?php echo $prodotto["id"]; ?>"
-                                                class="btn btn-danger">Elimina</a>
+                                        class="btn btn-danger">Elimina</a>
                                 <?php endif; ?>
                             </div>
                         </div>
-                            </div>
-                    <?php endforeach; ?>
-                </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
+    </div>
 </section>

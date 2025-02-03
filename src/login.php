@@ -25,7 +25,7 @@ else{
     $templateParams["titolo"] = "TownfolkMagicShop - Login";
     $templateParams["nome"] = "login-form.php";
 }
-$templateParams["categorie"] = $dbh->getCategories();
+$templateParams["prodottiCasuali"] = $dbh->getRandomProducts(2);
 $templateParams["ruolo"] = isUserLoggedIn() ? $dbh->getRoleByUsername($_SESSION["username"])["ruolo"] : "cliente";
 
 
