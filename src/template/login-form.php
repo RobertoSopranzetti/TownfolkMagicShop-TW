@@ -1,4 +1,4 @@
-<form action="#" method="POST" class="container mt-5">
+<form action="login.php" method="POST" class="container mt-5">
     <h2 class="text-center">Login</h2>
     <?php if (isset($templateParams["errorelogin"])): ?>
         <div class="alert alert-danger" role="alert">
