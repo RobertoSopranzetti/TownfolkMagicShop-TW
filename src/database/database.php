@@ -178,6 +178,17 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function searchProducts($query)
+    {
+        $query = "%" . $query . "%";
+        $sql = "SELECT id, titolo, prezzo, immagine FROM prodotti WHERE titolo LIKE ? OR descrizione LIKE ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param('ss', $query, $query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function getProductsByUserId($userId)
     {
         $query = "SELECT id, titolo, immagine, descrizione, prezzo, sconto, quantita_disponibile, data_creazione

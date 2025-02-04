@@ -39,13 +39,14 @@
                         <span class="input-group-text bg-white border-0 rounded-pill-end"><i
                                 class="bi bi-mic"></i></span>
                     </div>
+                    <div id="search-results" class="search-results-container"></div>
                 </div>
                 <div class="d-flex align-items-center">
                     <?php echo getUserIcon($templateParams["ruolo"]) ?>
                     <a class="navbar-brand d-lg-none" href="login.php"><i class="bi bi-person"></i></a>
                     <?php if (isUserLoggedIn()): ?>
-                        <a class="navbar-brand d-none d-lg-block"
-                            href="login.php">Ciao,<?php echo $_SESSION["username"]; ?>!</a>
+                        <a class="navbar-brand d-none d-lg-block" href="login.php">Ciao,
+                            <?php echo $_SESSION["username"]; ?>!</a>
                     <?php else: ?>
                         <a class="navbar-brand d-none d-lg-block" href="login.php">Login</a>
                     <?php endif; ?>
