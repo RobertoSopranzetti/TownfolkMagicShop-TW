@@ -58,15 +58,15 @@ class DatabaseHelper
 
     public function getOrderById($orderId)
     {
-        $query = "SELECT o.id, o.data_ordine, so.nome AS status, o.consegna_prevista, o.spesa_complessiva,
-                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                        ao.quantita, ao.prezzo, u.nome AS cliente, p.id_venditore
-                FROM ordini o
-                JOIN articoli_ordine ao ON o.id = ao.id_ordine
-                JOIN prodotti p ON ao.id_prodotto = p.id
-                JOIN utenti u ON o.id_utente = u.id
-                JOIN stati_ordini so ON o.id_stato_ordine = so.id
-                WHERE o.id = ?";
+        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
+                            p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                            ao.quantita, ao.prezzo, u.nome AS cliente, p.id_venditore
+                    FROM ordini o
+                    JOIN articoli_ordine ao ON o.id = ao.id_ordine
+                    JOIN prodotti p ON ao.id_prodotto = p.id
+                    JOIN utenti u ON o.id_utente = u.id
+                    JOIN stati_ordini so ON o.id_stato_ordine = so.id
+                    WHERE o.id = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $orderId);
         $stmt->execute();
@@ -84,14 +84,14 @@ class DatabaseHelper
 
     public function getOrdersByUserId($userId)
     {
-        $query = "SELECT o.id, o.data_ordine, so.nome AS status, o.consegna_prevista, o.spesa_complessiva,
-                    p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                    ao.quantita, ao.prezzo
-            FROM ordini o
-            JOIN articoli_ordine ao ON o.id = ao.id_ordine
-            JOIN prodotti p ON ao.id_prodotto = p.id
-            JOIN stati_ordini so ON o.id_stato_ordine = so.id
-            WHERE o.id_utente = ?";
+        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
+                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                        ao.quantita, ao.prezzo
+                FROM ordini o
+                JOIN articoli_ordine ao ON o.id = ao.id_ordine
+                JOIN prodotti p ON ao.id_prodotto = p.id
+                JOIN stati_ordini so ON o.id_stato_ordine = so.id
+                WHERE o.id_utente = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $userId);
         $stmt->execute();
@@ -101,15 +101,15 @@ class DatabaseHelper
 
     public function getOrdersBySellerId($sellerId)
     {
-        $query = "SELECT o.id, o.data_ordine, so.nome AS status, o.consegna_prevista, o.spesa_complessiva,
-                    p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                    ao.quantita, ao.prezzo, u.nome AS cliente
-            FROM ordini o
-            JOIN articoli_ordine ao ON o.id = ao.id_ordine
-            JOIN prodotti p ON ao.id_prodotto = p.id
-            JOIN utenti u ON o.id_utente = u.id
-            JOIN stati_ordini so ON o.id_stato_ordine = so.id
-            WHERE p.id_venditore = ?";
+        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
+                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                        ao.quantita, ao.prezzo, u.nome AS cliente
+                FROM ordini o
+                JOIN articoli_ordine ao ON o.id = ao.id_ordine
+                JOIN prodotti p ON ao.id_prodotto = p.id
+                JOIN utenti u ON o.id_utente = u.id
+                JOIN stati_ordini so ON o.id_stato_ordine = so.id
+                WHERE p.id_venditore = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $sellerId);
         $stmt->execute();
@@ -161,7 +161,7 @@ class DatabaseHelper
 
     public function getLimitedProducts()
     {
-        $stmt = $this->db->prepare("SELECT * FROM ordini WHERE edizione_limitata = 1");
+        $stmt = $this->db->prepare("SELECT * FROM prodotti WHERE edizione_limitata = 1");
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -170,7 +170,7 @@ class DatabaseHelper
 
     public function getShortageProducts($id)
     {
-        $stmt = $this->db->prepare("SELECT * FROM ordini WHERE quantita_disponibile = 0 AND id_venditore = ?");
+        $stmt = $this->db->prepare("SELECT * FROM prodotti WHERE quantita_disponibile = 0 AND id_venditore = ?");
         $stmt->bind_param('i', $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -292,7 +292,10 @@ class DatabaseHelper
 
     public function getProductsInCart($id_utente)
     {
-        $query = "SELECT p.*, ac.quantita FROM prodotti p JOIN articoli_carrello ac ON p.id = ac.id_prodotto JOIN carrelli c ON ac.id_carrello = c.id WHERE c.id_utente = ? AND c.id_stato_carrello = 1";
+        $query = "SELECT p.*, ac.quantita FROM prodotti p
+            JOIN articoli_carrello ac ON p.id = ac.id_prodotto
+            JOIN carrelli c ON ac.id_carrello = c.id
+            WHERE c.id_utente = ? AND c.id_stato_carrello = 1";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $id_utente);
         $stmt->execute();
