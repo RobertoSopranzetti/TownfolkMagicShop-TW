@@ -69,11 +69,11 @@
                 </div>
             </div>
         <?php endif; ?>
-        <div class="col-12 <?php echo $templateParams["ruolo"] == "cliente" ? 'col-md-9' : ''; ?>">
-            <div class="row">
+        <div class="col-12 col-md-9 mt-4 mt-md-0">
+            <div class="row g-4">
                 <?php foreach ($templateParams["prodotti"] as $prodotto): ?>
-                    <div class="col-6 col-lg-4 mb-4">
-                        <div class="card h-100" style="margin-left: 15px;">
+                    <div class="col-6 col-lg-4">
+                        <div class="card h-100">
                             <img src="<?php echo UPLOAD_DIR . $prodotto["immagine"]; ?>"
                                 alt="<?php echo $prodotto["titolo"]; ?>" class="card-img-top">
                             <div class="card-body">
@@ -87,7 +87,7 @@
                                     <a href="gestisci-prodotti.php?action=3&id=<?php echo $prodotto["id"]; ?>"
                                         class="btn btn-danger">Elimina</a>
                                 <?php else: ?>
-                                    <a href="visualizza-prodotto.php?id=<?php echo $prodotto["id"]; ?>"
+                                    <a href="prodotto.php?id=<?php echo $prodotto["id"]; ?>"
                                         class="btn btn-info">Visualizza</a>
                                 <?php endif; ?>
                             </div>

@@ -11,11 +11,12 @@ if (isset($_GET["id"])) {
 $templateParams["prodotto"] = $dbh->getProductById($idprodotto);
 
 // Imposta il titolo della pagina in modo dinamico in base al nome del prodotto
-if (count($templateParams["prodotto"]) > 0) {
+if ($templateParams["prodotto"] && count($templateParams["prodotto"]) > 0) {
     $titoloProdotto = $templateParams["prodotto"]["titolo"];
     $templateParams["titolo"] = "TownfolkMagicShop - " . $titoloProdotto;
 } else {
     $templateParams["titolo"] = "TownfolkMagicShop - Prodotto non trovato";
+    $templateParams["prodotto"] = null; // Assicurati che il prodotto sia null se non trovato
 }
 
 // Imposta altri parametri del template
