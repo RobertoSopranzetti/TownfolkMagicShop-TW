@@ -57,6 +57,16 @@ INSERT INTO `categorie` (`id`, `nome`, `descrizione`, `id_categoria_padre`) VALU
 (4, 'Vestiario', 'Abbigliamento e costumi a tema', NULL),
 (5, 'Casa', 'Articoli per la casa a tema fantasy e giochi di ruolo', NULL);
 
+CREATE TABLE `credenziali` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `salt` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `credenziali_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `utenti` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `notifiche` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_utente` int(11) NOT NULL,

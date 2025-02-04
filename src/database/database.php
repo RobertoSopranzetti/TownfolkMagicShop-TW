@@ -339,23 +339,47 @@ class DatabaseHelper
 
     public function registerUser($nome, $cognome, $email, $username, $password, $id_ruolo)
     {
-        $query = "INSERT INTO utenti (email, username, nome, cognome, password, id_ruolo) VALUES (?, ?, ?, ?, ?, ?)";
+        // Genera un salt casuale
+        $salt = bin2hex(random_bytes(16));
+        // Hash della password con il salt
+        $password_hash = password_hash($salt . $password, PASSWORD_BCRYPT);
+
+        // Inserisci l'utente nella tabella utenti
+        $query = "INSERT INTO utenti (email, username, nome, cognome, id_ruolo) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('sssssi', $email, $username, $nome, $cognome, $password, $id_ruolo);
+        $stmt->bind_param('ssssi', $email, $username, $nome, $cognome, $id_ruolo);
+        $stmt->execute();
+        $user_id = $stmt->insert_id;
+
+        // Inserisci le credenziali nella tabella credenziali
+        $query = "INSERT INTO credenziali (user_id, salt, password) VALUES (?, ?, ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('iss', $user_id, $salt, $password_hash);
         $stmt->execute();
 
-        return $stmt->insert_id;
+        return $user_id;
     }
 
     public function checkLogin($identifier, $password)
     {
-        $query = "SELECT id, nome, email, username, id_ruolo FROM utenti WHERE (email = ? OR username = ?) AND password = ?";
+        // Recupera l'utente e le credenziali
+        $query = "SELECT u.id, u.nome, u.email, u.username, u.id_ruolo, c.salt, c.password
+                FROM utenti u
+                JOIN credenziali c ON u.id = c.user_id
+                WHERE (u.email = ? OR u.username = ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('sss', $identifier, $identifier, $password);
+        $stmt->bind_param('ss', $identifier, $identifier);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        return $result->fetch_assoc();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            // Verifica la password concatenando il salt
+            if (password_verify($row['salt'] . $password, $row['password'])) {
+                return $row;
+            }
+        }
+        return false;
     }
 
     public function getRoleByUsername($username)
