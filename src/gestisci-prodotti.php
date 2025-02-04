@@ -20,7 +20,6 @@ if ($_GET["action"] != 1) {
 $templateParams["titolo"] = "TownfolkMagicShop - Gestisci Prodotti";
 $templateParams["nome"] = "product-form.php";
 $templateParams["categorie"] = $dbh->getCategories();
-$templateParams["prodottiCasuali"] = $dbh->getRandomProducts(2);
 
 $templateParams["azione"] = $_GET["action"];
 

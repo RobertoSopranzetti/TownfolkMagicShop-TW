@@ -31,8 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $templateParams["titolo"] = $isVenditore ? "Registrazione Venditore" : "Registrazione Cliente";
 $templateParams["nome"] = "register-form.php";
 $templateParams["isVenditore"] = $isVenditore;
-$templateParams["ruolo"] = isUserLoggedIn() ? $dbh->getRoleByUsername($_SESSION["username"])["ruolo"] : "cliente";
-$templateParams["prodottiCasuali"] = $dbh->getRandomProducts(2);
 
 require 'template/base.php';
 ?>

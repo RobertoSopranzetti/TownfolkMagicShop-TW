@@ -16,7 +16,6 @@ $templateParams["titolo"] = "TownfolkMagicShop - Checkout";
 $templateParams["nome"] = "checkout-form.php";
 $templateParams["prodottiCarrello"] = $prodottiCarrello;
 $templateParams["subtotale"] = $subtotale;
-$templateParams["prodottiCasuali"] = $dbh->getRandomProducts(2);
 
 // Carica il template
 require 'template/base.php';

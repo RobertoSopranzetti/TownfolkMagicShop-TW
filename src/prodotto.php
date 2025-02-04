@@ -21,7 +21,6 @@ if (count($templateParams["prodotto"]) > 0) {
 // Imposta altri parametri del template
 $templateParams["nome"] = "singolo-prodotto.php";
 $templateParams["categorie"] = $dbh->getCategories();
-$templateParams["prodottiCasuali"] = $dbh->getRandomProducts(2);
 
 require 'template/base.php';
 ?>

@@ -1,9 +1,7 @@
 <?php
 require_once 'bootstrap.php';
-require_once 'utils/functions.php';
 
 $templateParams["titolo"] = "TownfolkMagicShop - Prodotti";
-$templateParams["ruolo"] = isUserLoggedIn() ? $dbh->getRoleByUsername($_SESSION["username"])["ruolo"] : "cliente";
 
 $minPrice = $dbh->getMinPrice();
 $maxPrice = $dbh->getMaxPrice();
@@ -20,7 +18,7 @@ $templateParams["limitedEdition"] = $limitedEdition;
 
 // Logica per filtrare i prodotti
 if ($templateParams["ruolo"] == "venditore") {
-    if ($_GET['shortage'] == 1) {
+    if (isset($_GET['shortage']) && $_GET['shortage'] == 1) {
         $prodotti = $dbh->getShortageProducts($_SESSION["idutente"]);
     } else {
         $prodotti = $dbh->getProductsByUserId($_SESSION["idutente"]);
