@@ -18,8 +18,10 @@ function isUserLoggedIn()
 
 function registerLoggedUser($user)
 {
-    $_SESSION["idutente"] = $user["id"];
-    $_SESSION["username"] = $user["username"];
+    if (is_array($user) && isset($user["id"]) && isset($user["username"])) {
+        $_SESSION["idutente"] = $user["id"];
+        $_SESSION["username"] = $user["username"];
+    }
 }
 
 function getUserIcon($ruolo)
@@ -86,11 +88,13 @@ function updateQueryParams($paramsToUpdate)
     return array_merge($_GET, $paramsToUpdate);
 }
 
-function getPendingOrders($orders){
+function getPendingOrders($orders)
+{
     $pendingOrders = array_filter($orders, function ($order) {
         return $order['id_stato_ordine'] == 1;
     });
-    return count($pendingOrders);}
+    return count($pendingOrders);
+}
 
 function getNewNotifications($notifications)
 {

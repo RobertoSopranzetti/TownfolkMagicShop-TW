@@ -350,34 +350,20 @@ class DatabaseHelper
 
     public function registerUser($nome, $cognome, $email, $username, $password, $id_ruolo)
     {
-        // Genera un salt casuale
-        $salt = bin2hex(random_bytes(16));
-        // Hash della password con il salt
-        $password_hash = password_hash($salt . $password, PASSWORD_BCRYPT);
-
-        // Inserisci l'utente nella tabella utenti
-        $query = "INSERT INTO utenti (email, username, nome, cognome, id_ruolo) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO utenti (email, username, nome, cognome, id_ruolo, password) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ssssi', $email, $username, $nome, $cognome, $id_ruolo);
-        $stmt->execute();
-        $user_id = $stmt->insert_id;
-
-        // Inserisci le credenziali nella tabella credenziali
-        $query = "INSERT INTO credenziali (user_id, salt, password) VALUES (?, ?, ?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('iss', $user_id, $salt, $password_hash);
+        $stmt->bind_param('ssssis', $email, $username, $nome, $cognome, $id_ruolo, $password);
         $stmt->execute();
 
-        return $user_id;
+        return $stmt->insert_id;
     }
 
     public function checkLogin($identifier, $password)
     {
         // Recupera l'utente e le credenziali
-        $query = "SELECT u.id, u.nome, u.email, u.username, u.id_ruolo, c.salt, c.password
-                FROM utenti u
-                JOIN credenziali c ON u.id = c.user_id
-                WHERE (u.email = ? OR u.username = ?)";
+        $query = "SELECT id, nome, email, username, id_ruolo, password
+                FROM utenti
+                WHERE (email = ? OR username = ?)";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ss', $identifier, $identifier);
         $stmt->execute();
@@ -385,13 +371,14 @@ class DatabaseHelper
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            // Verifica la password concatenando il salt
-            if (password_verify($row['salt'] . $password, $row['password'])) {
+            // Verifica la password
+            if (password_verify($password, $row['password'])) {
                 return $row;
             }
         }
         return false;
     }
+
 
     public function getRoleByUsername($username)
     {

@@ -4,11 +4,10 @@ require_once 'bootstrap.php';
 if (isset($_POST["identifier"]) && isset($_POST["password"])) {
     $login_result = $dbh->checkLogin($_POST["identifier"], $_POST["password"]);
     if ($login_result == false) {
-        //Login fallito
         $templateParams["errorelogin"] = "Errore! Controllare username o password!";
     } else {
         registerLoggedUser($login_result);
-        header("location: login-home.php");
+        header("location: login.php");
         exit();
     }
 }

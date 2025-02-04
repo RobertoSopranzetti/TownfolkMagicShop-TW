@@ -17,7 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $userId = $dbh->registerUser($nome, $cognome, $email, $username, password_hash($password, PASSWORD_BCRYPT), $id_ruolo);
         if ($userId) {
-            registerLoggedUser($userId);
+            // Recupera i dati dell'utente appena registrato
+            $user = $dbh->getUserById($userId);
+            registerLoggedUser($user);
             header("Location: index.php");
             exit();
         } else {
