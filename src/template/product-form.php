@@ -61,6 +61,7 @@ $categorie = $templateParams["categorie"];
                     <img src="<?php echo UPLOAD_DIR . $prodotto['immagine']; ?>" alt="Immagine del Prodotto" class="img-thumbnail"
                         style="max-width: 150px;">
                 </div>
+                <input type="hidden" name="immagine_esistente" value="<?php echo $prodotto['immagine']; ?>">
             <?php endif; ?>
         </div>
         <div class="mb-3 form-check">
@@ -71,7 +72,7 @@ $categorie = $templateParams["categorie"];
         <div class="mb-3">
             <button type="submit" class="btn btn-primary"><?php echo $azione; ?> Prodotto</button>
         </div>
-        <?php if ($azione == 'Modifica'): ?>
+        <?php if ($azione == 'Modifica' || $azione == 'Cancella'): ?>
             <input type="hidden" name="id" value="<?php echo $prodotto['id']; ?>">
         <?php endif; ?>
         <input type="hidden" name="azione" value="<?php echo $azione; ?>">

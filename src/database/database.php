@@ -191,9 +191,7 @@ class DatabaseHelper
 
     public function getProductsByUserId($userId)
     {
-        $query = "SELECT id, titolo, immagine, descrizione, prezzo, sconto, quantita_disponibile, data_creazione
-            FROM prodotti
-            WHERE id_venditore=?";
+        $query = "SELECT * FROM prodotti WHERE id_venditore=?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $userId);
         $stmt->execute();
@@ -209,7 +207,6 @@ class DatabaseHelper
         $stmt->bind_param('ii', $productId, $sellerId);
         $stmt->execute();
         $result = $stmt->get_result();
-
         return $result->fetch_assoc();
     }
 
@@ -224,23 +221,23 @@ class DatabaseHelper
         return $row['id_venditore'];
     }
 
-    public function insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_venditore, $immagine, $edizione_limitata)
+    public function insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $id_utente, $immagine, $edizione_limitata)
     {
-        $query = "INSERT INTO prodotti (titolo, descrizione, prezzo, sconto, quantita_disponibile, id_categoria, id_venditore, immagine, edizione_limitata) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO prodotti (titolo, descrizione, prezzo, sconto, quantita_disponibile, id_categoria, id_venditore, immagine, edizione_limitata)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ssdiisisi', $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $id_venditore, $immagine, $edizione_limitata);
+        $stmt->bind_param('ssddiiisi', $titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $id_utente, $immagine, $edizione_limitata);
         $stmt->execute();
-
         return $stmt->insert_id;
     }
 
-    public function updateProduct($id, $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $immagine, $edizione_limitata)
+    public function updateProduct($id_prodotto, $titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $immagine, $edizione_limitata)
     {
-        $query = "UPDATE prodotti SET titolo = ?, descrizione = ?, prezzo = ?, sconto = ?, quantita_disponibile = ?, id_categoria = ?, immagine = ?, edizione_limitata = ? WHERE id = ?";
+        $query = "UPDATE prodotti SET titolo = ?, descrizione = ?, prezzo = ?, sconto = ?, quantita_disponibile = ?, id_categoria = ?, immagine = ?, edizione_limitata = ?
+                WHERE id = ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ssdiissii', $titolo, $descrizione, $prezzo, $sconto, $quantita_disponibile, $id_categoria, $immagine, $edizione_limitata, $id);
-
-        return $stmt->execute();
+        $stmt->bind_param('ssddiisii', $titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $immagine, $edizione_limitata, $id_prodotto);
+        $stmt->execute();
     }
 
     public function reduceProductQuantity($productId, $quantity)

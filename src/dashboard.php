@@ -16,7 +16,6 @@ $templateParams["selectedCategory"] = $selectedCategory;
 $templateParams["selectedMaxPrice"] = $selectedMaxPrice;
 $templateParams["limitedEdition"] = $limitedEdition;
 
-// Logica per filtrare i prodotti
 if ($templateParams["ruolo"] == "venditore") {
     if (isset($_GET['shortage']) && $_GET['shortage'] == 1) {
         $prodotti = $dbh->getShortageProducts($_SESSION["idutente"]);
@@ -30,8 +29,7 @@ if ($templateParams["ruolo"] == "venditore") {
 
 $templateParams["prodotti"] = $prodotti;
 $templateParams["nome"] = "lista-prodotti.php";
-$templateParams["prodottiCasuali"] = $dbh->getRandomProducts(2);
-$templateParams["categorie"] = $dbh->getCategories();
+$templateParams["formmsg"] = isset($_GET["formmsg"]) ? $_GET["formmsg"] : '';
 
 require 'template/base.php';
 ?>

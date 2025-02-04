@@ -6,12 +6,18 @@ if (!isUserLoggedIn() || !isset($_GET["action"]) || ($_GET["action"] != 1 && $_G
     exit();
 }
 
+$templateParams["azione"] = $_GET["action"];
+
 if ($_GET["action"] != 1) {
-    $risultato = $dbh->getProductByIdAndSeller($_GET["id"], $_SESSION["idutente"]);
-    if (count($risultato) == 0) {
+    $productId = $_GET["id"];
+    $sellerId = $_SESSION["idutente"];
+
+    $risultato = $dbh->getProductByIdAndSeller($productId, $sellerId);
+
+    if (empty($risultato)) {
         $templateParams["prodotto"] = null;
     } else {
-        $templateParams["prodotto"] = $risultato[0];
+        $templateParams["prodotto"] = $risultato;
     }
 } else {
     $templateParams["prodotto"] = getEmptyProduct();
@@ -20,8 +26,6 @@ if ($_GET["action"] != 1) {
 $templateParams["titolo"] = "TownfolkMagicShop - Gestisci Prodotti";
 $templateParams["nome"] = "product-form.php";
 $templateParams["categorie"] = $dbh->getCategories();
-
-$templateParams["azione"] = $_GET["action"];
 
 // Aggiungi il messaggio di feedback se presente
 $templateParams["formmsg"] = isset($_GET["formmsg"]) ? $_GET["formmsg"] : '';

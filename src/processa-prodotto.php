@@ -34,24 +34,36 @@ if (isset($_FILES['immagine']) && $_FILES['immagine']['error'] == UPLOAD_ERR_OK)
         echo "Errore nel caricamento dell'immagine: " . $msg;
         exit();
     }
+} elseif ($azione == 'Modifica' || $azione == 'Cancella') {
+    $risultato = $dbh->getProductByIdAndSeller($id_prodotto, $id_utente);
+    if (empty($risultato)) {
+        $msg = "Errore: prodotto non trovato o non autorizzato!";
+        header("location: dashboard.php?formmsg=" . urlencode($msg));
+        exit();
+    }
+    if ($azione == 'Modifica' && $immagine === null) {
+        $immagine = isset($_POST['immagine_esistente']) ? $_POST['immagine_esistente'] : $risultato['immagine']; // Mantieni l'immagine esistente
+    }
 }
 
 if ($azione == 'Inserisci') {
-    $id_prodotto = $dbh->insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $id_utente, $immagini, $edizione_limitata);
+    $id_prodotto = $dbh->insertProduct($titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $id_utente, $immagine, $edizione_limitata);
     if ($id_prodotto) {
         $msg = "Inserimento completato correttamente!";
     } else {
         $msg = "Errore nell'inserimento!";
     }
 } elseif ($azione == 'Modifica') {
-    $dbh->updateProduct($id_prodotto, $titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $immagini, $edizione_limitata);
+    $dbh->updateProduct($id_prodotto, $titolo, $descrizione, $prezzo, $sconto, $quantita, $categoria, $immagine, $edizione_limitata);
     $msg = "Modifica completata correttamente!";
 } elseif ($azione == 'Cancella') {
     $dbh->deleteProduct($id_prodotto);
     $msg = "Cancellazione completata correttamente!";
+} else {
+    $msg = "ERRORE! Azione non valida!";
 }
 
-// Reindirizza alla pagina gestisci-prodotti.php con un messaggio di feedback
-header("location: gestisci-prodotti.php?formmsg=" . urlencode($msg));
+// Reindirizza alla pagina dashboard.php con un messaggio di feedback
+header("location: dashboard.php?formmsg=" . urlencode($msg));
 exit();
 ?>

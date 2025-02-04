@@ -1,7 +1,15 @@
 <section class="container my-4">
+    <header class="mb-4">
+        <h1 class="text-center">Lista Prodotti</h1>
+    </header>
     <div class="row">
+        <?php if (!empty($templateParams["formmsg"])): ?>
+            <div class="alert alert-info" role="alert">
+                <?php echo $templateParams["formmsg"]; ?>
+            </div>
+        <?php endif; ?>
         <?php if ($templateParams["ruolo"] == "cliente"): ?>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-3 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h2 class="me-3">Filtri</h2>
                     <a href="dashboard.php" class="text-danger">Rimuovi tutto</a>
@@ -65,11 +73,11 @@
             <div class="row">
                 <?php foreach ($templateParams["prodotti"] as $prodotto): ?>
                     <div class="col-6 col-lg-4 mb-4">
-                        <div class="card h-100">
+                        <div class="card h-100" style="margin-left: 15px;">
                             <img src="<?php echo UPLOAD_DIR . $prodotto["immagine"]; ?>"
-                                alt="<?php echo $prodotto["nome"]; ?>" class="card-img-top">
+                                alt="<?php echo $prodotto["titolo"]; ?>" class="card-img-top">
                             <div class="card-body">
-                                <h5 class="card-title"><?php echo $prodotto["nome"]; ?></h5>
+                                <h5 class="card-title"><?php echo $prodotto["titolo"]; ?></h5>
                                 <p class="card-text"><?php echo number_format($prodotto["prezzo"], 2); ?> €</p>
                                 <?php if ($templateParams["ruolo"] == "venditore"): ?>
                                     <?php if ($prodotto["edizione_limitata"] != 1): ?>
@@ -78,6 +86,9 @@
                                     <?php endif; ?>
                                     <a href="gestisci-prodotti.php?action=3&id=<?php echo $prodotto["id"]; ?>"
                                         class="btn btn-danger">Elimina</a>
+                                <?php else: ?>
+                                    <a href="visualizza-prodotto.php?id=<?php echo $prodotto["id"]; ?>"
+                                        class="btn btn-info">Visualizza</a>
                                 <?php endif; ?>
                             </div>
                         </div>
