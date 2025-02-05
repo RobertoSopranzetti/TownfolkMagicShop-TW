@@ -19,8 +19,10 @@
                 <div class="col-12 col-md-3 text-center">
                     <img src="<?php echo UPLOAD_DIR . $ordine["prodotto_immagine"]; ?>" alt="Immagine del Prodotto"
                         class="img-fluid mb-2">
-                    <a href="prodotto.php?id=<?php echo $ordine["prodotto_id"]; ?>" class="btn btn-link">Dettagli
-                        Prodotto</a>
+                    <?php if ($templateParams["ruolo"] == "cliente"): ?>
+                        <a href="prodotto.php?id=<?php echo $ordine["prodotto_id"]; ?>" class="btn btn-link">Dettagli
+                            Prodotto</a>
+                    <?php endif; ?>
                 </div>
                 <div class="col-12 col-md-9">
                     <p><strong>Nome Prodotto:</strong> <?php echo $ordine["prodotto_nome"]; ?></p>
