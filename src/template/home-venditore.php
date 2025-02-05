@@ -26,7 +26,7 @@
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Prodotti in Esaurimento</h5>
-                    <p class="card-text"><?php echo $templateParams["prodottiInEsaurimento"] ?> prodotti stanno per esaurirsi.</p>
+                    <p class="card-text"><?php echo $templateParams["prodottiInEsaurimento"] ?> prodotti sono esauriti.</p>
                     <a href="dashboard.php?shortage=1" class="btn btn-danger">Visualizza Prodotti Esauriti</a>
                 </div>
             </div>
