@@ -61,7 +61,8 @@
                                     <h6 class="my-0"><?php echo $prodotto["titolo"]; ?></h6>
                                     <small class="text-muted">Quantità: <?php echo $prodotto["quantita"]; ?></small>
                                 </div>
-                                <span class="text-muted"><?php echo number_format($prodotto["prezzo_totale"], 2); ?>
+                                <span
+                                    class="text-muted"><?php echo number_format($prodotto["prezzo"] * $prodotto["quantita"], 2); ?>
                                     €</span>
                             </li>
                         <?php endforeach; ?>
