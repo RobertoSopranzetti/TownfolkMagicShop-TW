@@ -271,12 +271,46 @@ class DatabaseHelper
         return $stmt->affected_rows > 0;
     }
 
+    public function createCart($id_utente)
+    {
+        $query = "INSERT INTO carrelli (id_utente, id_stato_carrello, data_creazione) VALUES (?, 1, NOW())";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $id_utente);
+        $stmt->execute();
+        $stmt->close();
+    }
+
     public function addToCart($id_utente, $id_prodotto, $quantita)
     {
-        $query = "INSERT INTO articoli_carrello (id_carrello, id_prodotto, quantita, prezzo) VALUES ((SELECT id FROM carrelli WHERE id_utente = ? AND id_stato_carrello = 1), ?, ?, (SELECT prezzo FROM prodotti WHERE id = ?)) ON DUPLICATE KEY UPDATE quantita = quantita + VALUES(quantita)";
+        // Verifica se esiste un carrello aperto per l'utente
+        $query = "SELECT id FROM carrelli WHERE id_utente = ? AND id_stato_carrello = 1";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('iiii', $id_utente, $id_prodotto, $quantita, $id_prodotto);
-        return $stmt->execute();
+        $stmt->bind_param('i', $id_utente);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows === 0) {
+            // Se non esiste un carrello aperto, creane uno nuovo
+            $stmt->close();
+            $this->createCart($id_utente);
+            // Riprova a ottenere l'id del carrello appena creato
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param('i', $id_utente);
+            $stmt->execute();
+            $stmt->store_result();
+        }
+        $stmt->bind_result($id_carrello);
+        $stmt->fetch();
+        $stmt->close();
+
+        // Aggiungi il prodotto al carrello
+        $query = "INSERT INTO articoli_carrello (id_carrello, id_prodotto, quantita, prezzo)
+            VALUES (?, ?, ?, (SELECT prezzo FROM prodotti WHERE id = ?))
+            ON DUPLICATE KEY
+            UPDATE quantita = quantita + VALUES(quantita)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('iiii', $id_carrello, $id_prodotto, $quantita, $id_prodotto);
+        $stmt->execute();
+        $stmt->close();
     }
 
     public function removeFromCart($id_utente, $id_prodotto)
@@ -284,6 +318,16 @@ class DatabaseHelper
         $query = "DELETE FROM articoli_carrello WHERE id_carrello = (SELECT id FROM carrelli WHERE id_utente = ? AND id_stato_carrello = 1) AND id_prodotto = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ii', $id_utente, $id_prodotto);
+        return $stmt->execute();
+    }
+
+    public function updateCartQuantity($id_utente, $id_prodotto, $quantita) {
+        $query = "UPDATE articoli_carrello ac
+            JOIN carrelli c ON ac.id_carrello = c.id
+            SET ac.quantita = ?
+            WHERE c.id_utente = ? AND c.id_stato_carrello = 1 AND ac.id_prodotto = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('iii', $quantita, $id_utente, $id_prodotto);
         return $stmt->execute();
     }
 

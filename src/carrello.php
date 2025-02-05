@@ -6,33 +6,16 @@ if (!isUserLoggedIn()) {
     exit();
 }
 
-$azione = isset($_GET['azione']) ? getAction($_GET['azione']) : '';
+$templateParams["titolo"] = "TownfolkMagicShop - Carrello";
+$templateParams["nome"] = "shopping-cart.php";
+$templateParams["prodottiCarrello"] = $dbh->getProductsInCart($_SESSION["idutente"]);
 
-switch ($azione) {
-    case 'Inserisci':
-        $id_prodotto = isset($_GET["id"]) ? intval($_GET["id"]) : 0;
-        $quantita = isset($_GET["quantita"]) ? intval($_GET["quantita"]) : 1;
-        if ($id_prodotto > 0 && $quantita > 0) {
-            $dbh->addToCart($_SESSION["idutente"], $id_prodotto, $quantita);
-            echo json_encode(["success" => true, "message" => "Prodotto aggiunto al carrello"]);
-        } else {
-            echo json_encode(["success" => false, "message" => "Parametri non validi"]);
-        }
-        exit();
-    case 'Rimuovi':
-        $id_prodotto = isset($_GET["id"]) ? intval($_GET["id"]) : 0;
-        if ($id_prodotto > 0) {
-            $dbh->removeFromCart($_SESSION["idutente"], $id_prodotto);
-            echo json_encode(["success" => true, "message" => "Prodotto rimosso dal carrello"]);
-        } else {
-            echo json_encode(["success" => false, "message" => "Parametri non validi"]);
-        }
-        exit();
-    default:
-        $templateParams["titolo"] = "TownfolkMagicShop - Carrello";
-        $templateParams["nome"] = "shopping-cart.php";
-        $templateParams["prodottiCarrello"] = $dbh->getProductsInCart($_SESSION["idutente"]);
-        require 'template/base.php';
-        break;
+// Calcola il subtotale
+$subtotale = 0;
+foreach ($templateParams["prodottiCarrello"] as $prodotto) {
+    $subtotale += $prodotto["prezzo"] * $prodotto["quantita"];
 }
+$templateParams["subtotale"] = $subtotale;
+
+require 'template/base.php';
 ?>

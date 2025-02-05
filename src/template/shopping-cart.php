@@ -12,7 +12,6 @@
                                 alt="<?php echo $prodotto["titolo"]; ?>" class="img-fluid" style="max-width: 100px;">
                             <div class="flex-grow-1 mx-3">
                                 <h5 class="mb-1"><?php echo $prodotto["titolo"]; ?></h5>
-                                <p class="mb-1">Colore: <?php echo $prodotto["colore"]; ?></p>
                                 <p class="mb-1"><?php echo number_format($prodotto["prezzo"], 2); ?> €</p>
                             </div>
                             <div class="d-flex flex-column align-items-end">
@@ -28,14 +27,21 @@
             </div>
             <div class="row">
                 <div class="col-12 text-end">
-                    <h5>Subtotale: <?php echo number_format($templateParams["subtotale"], 2); ?> €</h5>
+                    <h5>Subtotale: <span id="subtotale"><?php echo number_format($templateParams["subtotale"], 2); ?>
+                            €</span></h5>
                 </div>
             </div>
             <div class="row mt-4">
                 <div class="col-12 col-lg-6">
                     <div class="d-flex justify-content-between">
                         <h5>Riepilogo</h5>
-                        <p>Numero di oggetti: <?php echo count($templateParams["prodottiCarrello"]); ?></p>
+                        <?php
+                        $numeroOggetti = 0;
+                        foreach ($templateParams["prodottiCarrello"] as $prodotto) {
+                            $numeroOggetti += $prodotto["quantita"];
+                        }
+                        ?>
+                        <p>Numero di oggetti: <?php echo $numeroOggetti; ?></p>
                     </div>
                     <p>Subtotale: <?php echo number_format($templateParams["subtotale"], 2); ?> €</p>
                     <div class="mb-3">
