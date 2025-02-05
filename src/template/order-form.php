@@ -1,26 +1,23 @@
 <section>
     <h2>Gestisci Ordine</h2>
     <div class="container">
-        <?php if (isset($templateParams["formmsg"])): ?>
+        <?php if (!empty($templateParams["formmsg"])): ?>
             <div class="alert alert-info" role="alert">
                 <?php echo $templateParams["formmsg"]; ?>
             </div>
         <?php endif; ?>
         <?php $ordine = $templateParams["ordine"]; ?>
         <div class="row mb-4 p-3 border rounded bg-light">
-            <div class="col-12">
+            <div class="col-12 col-md-4 text-center">
+                <img src="<?php echo UPLOAD_DIR . $ordine["prodotto_immagine"]; ?>" alt="Immagine del Prodotto"
+                    class="img-fluid mb-2" style="max-width: 100%; height: auto;">
+            </div>
+            <div class="col-12 col-md-8">
                 <p><strong>Data Ordine:</strong> <?php echo $ordine["data_ordine"]; ?></p>
                 <p><strong>Status:</strong> <?php echo $ordine["status"]; ?></p>
-                <p><strong>Consegna Prevista:</strong> <?php echo $ordine["consegna_prevista"]; ?></p>
+                <p><strong>Consegna Prevista:</strong>
+                    <?php echo date('d-m-Y', strtotime($ordine["consegna_prevista"])); ?></p>
                 <p><strong>Cliente:</strong> <?php echo $ordine["cliente"]; ?></p>
-            </div>
-            <div class="col-12 col-md-3 text-center">
-                <img src="<?php echo UPLOAD_DIR . $ordine["prodotto_immagine"]; ?>" alt="Immagine del Prodotto"
-                    class="img-fluid mb-2">
-                <a href="prodotto.php?id=<?php echo $ordine["prodotto_id"]; ?>" class="btn btn-link">Dettagli
-                    Prodotto</a>
-            </div>
-            <div class="col-12 col-md-9">
                 <p><strong>Nome Prodotto:</strong> <?php echo $ordine["prodotto_nome"]; ?></p>
                 <p><strong>Quantità:</strong> <?php echo $ordine["quantita"]; ?></p>
                 <p><strong>Prezzo:</strong> <?php echo number_format($ordine["prezzo"], 2); ?> €</p>
@@ -37,8 +34,9 @@
                     </option>
                     <option value="Consegnato" <?php echo $ordine["status"] == "Consegnato" ? "selected" : ""; ?>>
                         Consegnato</option>
+                </select>
             </div>
-            <button type="submit" class="btn btn-primary">Aggiorna Stato</button>
+            <button type="submit" class="btn btn-primary w-100">Aggiorna Stato</button>
         </form>
     </div>
 </section>

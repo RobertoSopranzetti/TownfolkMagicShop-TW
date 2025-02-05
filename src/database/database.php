@@ -295,14 +295,14 @@ class DatabaseHelper
     public function getOrderById($orderId)
     {
         $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
-                            p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                            ao.quantita, ao.prezzo, u.nome AS cliente, p.id_venditore
-                    FROM ordini o
-                    JOIN articoli_ordine ao ON o.id = ao.id_ordine
-                    JOIN prodotti p ON ao.id_prodotto = p.id
-                    JOIN utenti u ON o.id_utente = u.id
-                    JOIN stati_ordini so ON o.id_stato_ordine = so.id
-                    WHERE o.id = ?";
+                    p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                    ao.quantita, ao.prezzo, u.username AS cliente, u.id AS id_cliente, p.id_venditore
+            FROM ordini o
+            JOIN articoli_ordine ao ON o.id = ao.id_ordine
+            JOIN prodotti p ON ao.id_prodotto = p.id
+            JOIN utenti u ON o.id_utente = u.id
+            JOIN stati_ordini so ON o.id_stato_ordine = so.id
+            WHERE o.id = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $orderId);
         $stmt->execute();
