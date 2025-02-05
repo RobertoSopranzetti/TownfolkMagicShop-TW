@@ -25,13 +25,13 @@ section ul li a:hover {
     max-width: 100px;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 768px) {
     .form-label {
         display: none;
     }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 768px) {
     .form-control::placeholder {
         color: transparent;
     }
