@@ -111,7 +111,7 @@ class DatabaseHelper
     public function searchProducts($query)
     {
         $query = "%" . $query . "%";
-        $sql = "SELECT id, titolo, prezzo, immagine FROM prodotti WHERE titolo LIKE ? OR descrizione LIKE ?";
+        $sql = "SELECT * FROM prodotti WHERE titolo LIKE ? OR descrizione LIKE ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param('ss', $query, $query);
         $stmt->execute();

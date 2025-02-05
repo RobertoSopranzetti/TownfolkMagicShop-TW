@@ -79,6 +79,13 @@ function applicaCoupon() {
     alert('Coupon applicato: ' + coupon);
 }
 
+document.getElementById('search').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        performSearch(this.value);
+    }
+});
+
 async function performSearch(query) {
     if (query.length < 3) {
         // Non eseguire la ricerca se la query è troppo breve
@@ -100,7 +107,11 @@ async function performSearch(query) {
 }
 
 function displaySearchResults(results) {
+    const mainContent = document.getElementById('main-content');
     const searchResultsContainer = document.getElementById('search-results');
+    mainContent.classList.add('d-none');
+    searchResultsContainer.classList.remove('d-none');
+
     searchResultsContainer.innerHTML = '';
 
     if (results.length === 0) {
@@ -110,13 +121,15 @@ function displaySearchResults(results) {
 
     results.forEach(result => {
         const resultItem = document.createElement('div');
-        resultItem.classList.add('search-result-item');
+        resultItem.classList.add('search-result-item', 'p-2', 'border', 'rounded', 'mb-2');
         resultItem.innerHTML = `
-            <a href="prodotto.php?id=${result.id}">
-                <img src="${result.immagine}" alt="${result.titolo}" class="search-result-image">
-                <div class="search-result-info">
-                    <h5>${result.titolo}</h5>
-                    <p>${result.prezzo} €</p>
+            <a href="prodotto.php?id=${result.id}" class="d-flex align-items-center text-decoration-none text-dark">
+                <div class="flex-shrink-0">
+                    <img src="upload/${result.immagine}" alt="${result.titolo}" class="img-fluid rounded" style="max-width: 150px; height: auto; object-fit: cover;">
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h5 class="mb-0">${result.titolo}</h5>
+                    <p class="mb-0">${result.prezzo} €</p>
                 </div>
             </a>
         `;

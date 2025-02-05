@@ -25,11 +25,10 @@
                         <span class="input-group-text bg-white border-0 rounded-pill-start"><i
                                 class="bi bi-search"></i></span>
                         <input class="form-control border-0" type="search" id="search" placeholder="Cerca"
-                            aria-label="Search" oninput="performSearch(this.value)">
+                            aria-label="Search">
                         <span class="input-group-text bg-white border-0 rounded-pill-end"><i
                                 class="bi bi-mic"></i></span>
                     </div>
-                    <div id="search-results" class="search-results-container"></div>
                 </div>
                 <div class="d-flex align-items-center">
                     <?php echo getUserIcon($templateParams["ruolo"]) ?>
@@ -46,13 +45,14 @@
     </header>
     <div class="container mt-5 mb-5">
         <div class="row">
-            <main class="col-12 col-md-8 order-md-1">
+            <main id="main-content" class="col-12 col-md-8 order-md-1">
                 <?php
                 if (isset($templateParams["nome"])) {
                     require($templateParams["nome"]);
                 }
                 ?>
             </main>
+            <div id="search-results" class="col-12 col-md-8 order-md-1 d-none"></div>
             <aside class="col-12 col-md-4 order-md-2 mt-5 mt-md-0 p-3 border rounded bg-light">
                 <?php if ($templateParams["ruolo"] == "venditore"): ?>
                     <section>
