@@ -56,76 +56,6 @@ class DatabaseHelper
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getOrderById($orderId)
-    {
-        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
-                            p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                            ao.quantita, ao.prezzo, u.nome AS cliente, p.id_venditore
-                    FROM ordini o
-                    JOIN articoli_ordine ao ON o.id = ao.id_ordine
-                    JOIN prodotti p ON ao.id_prodotto = p.id
-                    JOIN utenti u ON o.id_utente = u.id
-                    JOIN stati_ordini so ON o.id_stato_ordine = so.id
-                    WHERE o.id = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i', $orderId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_assoc();
-    }
-
-    public function updateOrderStatus($orderId, $newStatus)
-    {
-        $query = "UPDATE ordini SET id_stato_ordine = (SELECT id FROM stati_ordini WHERE nome = ?) WHERE id = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('si', $newStatus, $orderId);
-        return $stmt->execute();
-    }
-
-    public function getOrdersByUserId($userId)
-    {
-        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
-                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                        ao.quantita, ao.prezzo
-                FROM ordini o
-                JOIN articoli_ordine ao ON o.id = ao.id_ordine
-                JOIN prodotti p ON ao.id_prodotto = p.id
-                JOIN stati_ordini so ON o.id_stato_ordine = so.id
-                WHERE o.id_utente = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i', $userId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getOrdersBySellerId($sellerId)
-    {
-        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
-                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                        ao.quantita, ao.prezzo, u.nome AS cliente
-                FROM ordini o
-                JOIN articoli_ordine ao ON o.id = ao.id_ordine
-                JOIN prodotti p ON ao.id_prodotto = p.id
-                JOIN utenti u ON o.id_utente = u.id
-                JOIN stati_ordini so ON o.id_stato_ordine = so.id
-                WHERE p.id_venditore = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i', $sellerId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function createOrder($userId, $totale)
-    {
-        $query = "INSERT INTO ordini (id_utente, id_stato_ordine, data_ordine, spesa_complessiva) VALUES (?, 1, NOW(), ?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('id', $userId, $totale);
-        $stmt->execute();
-        return $stmt->insert_id;
-    }
-
     public function getProductById($id)
     {
         $query = "SELECT * FROM prodotti WHERE id=?";
@@ -321,7 +251,8 @@ class DatabaseHelper
         return $stmt->execute();
     }
 
-    public function updateCartQuantity($id_utente, $id_prodotto, $quantita) {
+    public function updateCartQuantity($id_utente, $id_prodotto, $quantita)
+    {
         $query = "UPDATE articoli_carrello ac
             JOIN carrelli c ON ac.id_carrello = c.id
             SET ac.quantita = ?
@@ -333,10 +264,10 @@ class DatabaseHelper
 
     public function getProductsInCart($id_utente)
     {
-        $query = "SELECT p.*, ac.quantita FROM prodotti p
+        $query = "SELECT p.*, ac.quantita, (p.prezzo * ac.quantita) AS prezzo_totale FROM prodotti p
             JOIN articoli_carrello ac ON p.id = ac.id_prodotto
             JOIN carrelli c ON ac.id_carrello = c.id
-            WHERE c.id_utente = ? AND c.id_stato_carrello = 1";
+            WHERE c.id_utente = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $id_utente);
         $stmt->execute();
@@ -352,6 +283,75 @@ class DatabaseHelper
         return $stmt->execute();
     }
 
+    public function createOrder($userId, $totale)
+    {
+        $query = "INSERT INTO ordini (id_utente, id_stato_ordine, data_ordine, spesa_complessiva) VALUES (?, 1, NOW(), ?)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('id', $userId, $totale);
+        $stmt->execute();
+        return $stmt->insert_id;
+    }
+
+    public function getOrderById($orderId)
+    {
+        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
+                            p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                            ao.quantita, ao.prezzo, u.nome AS cliente, p.id_venditore
+                    FROM ordini o
+                    JOIN articoli_ordine ao ON o.id = ao.id_ordine
+                    JOIN prodotti p ON ao.id_prodotto = p.id
+                    JOIN utenti u ON o.id_utente = u.id
+                    JOIN stati_ordini so ON o.id_stato_ordine = so.id
+                    WHERE o.id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $orderId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function updateOrderStatus($orderId, $newStatus)
+    {
+        $query = "UPDATE ordini SET id_stato_ordine = (SELECT id FROM stati_ordini WHERE nome = ?) WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('si', $newStatus, $orderId);
+        return $stmt->execute();
+    }
+
+    public function getOrdersByUserId($userId)
+    {
+        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
+                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                        ao.quantita, ao.prezzo
+                FROM ordini o
+                JOIN articoli_ordine ao ON o.id = ao.id_ordine
+                JOIN prodotti p ON ao.id_prodotto = p.id
+                JOIN stati_ordini so ON o.id_stato_ordine = so.id
+                WHERE o.id_utente = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getOrdersBySellerId($sellerId)
+    {
+        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
+                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                        ao.quantita, ao.prezzo, u.nome AS cliente
+                FROM ordini o
+                JOIN articoli_ordine ao ON o.id = ao.id_ordine
+                JOIN prodotti p ON ao.id_prodotto = p.id
+                JOIN utenti u ON o.id_utente = u.id
+                JOIN stati_ordini so ON o.id_stato_ordine = so.id
+                WHERE p.id_venditore = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $sellerId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
     public function getOrderItems($orderId)
     {
         $query = "SELECT p.titolo, ao.quantita, ao.prezzo
