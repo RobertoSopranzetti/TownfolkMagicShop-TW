@@ -321,13 +321,13 @@ class DatabaseHelper
     public function getOrdersByUserId($userId)
     {
         $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
-                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                        ao.quantita, ao.prezzo
-                FROM ordini o
-                JOIN articoli_ordine ao ON o.id = ao.id_ordine
-                JOIN prodotti p ON ao.id_prodotto = p.id
-                JOIN stati_ordini so ON o.id_stato_ordine = so.id
-                WHERE o.id_utente = ?";
+                    o.spesa_complessiva, p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                    ao.quantita, ao.prezzo
+            FROM ordini o
+            JOIN articoli_ordine ao ON o.id = ao.id_ordine
+            JOIN prodotti p ON ao.id_prodotto = p.id
+            JOIN stati_ordini so ON o.id_stato_ordine = so.id
+            WHERE o.id_utente = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $userId);
         $stmt->execute();
@@ -338,20 +338,21 @@ class DatabaseHelper
     public function getOrdersBySellerId($sellerId)
     {
         $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
-                        p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                        ao.quantita, ao.prezzo, u.nome AS cliente
-                FROM ordini o
-                JOIN articoli_ordine ao ON o.id = ao.id_ordine
-                JOIN prodotti p ON ao.id_prodotto = p.id
-                JOIN utenti u ON o.id_utente = u.id
-                JOIN stati_ordini so ON o.id_stato_ordine = so.id
-                WHERE p.id_venditore = ?";
+                    o.spesa_complessiva, p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                    ao.quantita, ao.prezzo, u.nome AS cliente
+            FROM ordini o
+            JOIN articoli_ordine ao ON o.id = ao.id_ordine
+            JOIN prodotti p ON ao.id_prodotto = p.id
+            JOIN utenti u ON o.id_utente = u.id
+            JOIN stati_ordini so ON o.id_stato_ordine = so.id
+            WHERE p.id_venditore = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $sellerId);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
     public function getOrderItems($orderId)
     {
         $query = "SELECT p.titolo, ao.quantita, ao.prezzo
@@ -437,10 +438,7 @@ class DatabaseHelper
 
     public function getUserNotifications($userId)
     {
-        $query = "SELECT n.messaggio, n.data_creazione, n.id_stato_notifica
-                FROM notifiche n
-                WHERE n.id_utente = ?
-                ORDER BY n.data_creazione DESC";
+        $query = "SELECT * FROM notifiche n WHERE n.id_utente = ? ORDER BY n.data_creazione DESC";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('i', $userId);
         $stmt->execute();

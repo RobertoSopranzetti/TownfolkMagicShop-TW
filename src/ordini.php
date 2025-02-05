@@ -8,7 +8,7 @@ if (!isUserLoggedIn()) {
 
 $templateParams["titolo"] = "TownfolkMagicShop - Ordini";
 $templateParams["nome"] = "lista-ordini.php";
-$templateParams["ordini"] = $templateParams["ruolo"] == "venditore" ? $dbh->getOrdersByUserId($_SESSION["idutente"]) : $dbh->getOrdersBySellerId($_SESSION["idutente"]);
+$templateParams["ordini"] = $templateParams["ruolo"] == "cliente" ? $dbh->getOrdersByUserId($_SESSION["idutente"]) : $dbh->getOrdersBySellerId($_SESSION["idutente"]);
 
 require 'template/base.php';
 ?>

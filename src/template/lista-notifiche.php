@@ -10,25 +10,25 @@
             <ul class="list-group">
                 <?php foreach ($templateParams["notifiche"] as $notifica): ?>
                     <li class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div>
                                 <p class="mb-1"><?php echo $notifica["messaggio"]; ?></p>
                                 <small class="text-muted"><?php echo $notifica["data_creazione"]; ?></small>
                             </div>
-                            <div>
+                            <div class="mt-2 mt-md-0 d-flex flex-wrap">
                                 <?php if ($notifica["id_stato_notifica"] == 1): // non letta ?>
                                     <a href="notifiche.php?action=1&id=<?php echo $notifica["id"]; ?>"
-                                        class="btn btn-sm btn-outline-primary me-2">
-                                        <i class="bi bi-check-circle"></i> Segna come letto
+                                        class="btn btn-sm btn-outline-primary me-2 mb-2">
+                                        <i class="bi bi-eye"></i> Segna come letto
                                     </a>
                                 <?php else: // letta ?>
                                     <a href="notifiche.php?action=2&id=<?php echo $notifica["id"]; ?>"
-                                        class="btn btn-sm btn-outline-secondary me-2">
-                                        <i class="bi bi-x-circle"></i> Segna come non letto
+                                        class="btn btn-sm btn-outline-secondary me-2 mb-2">
+                                        <i class="bi bi-eye-slash"></i> Segna come non letto
                                     </a>
                                 <?php endif; ?>
                                 <a href="notifiche.php?action=3&id=<?php echo $notifica["id"]; ?>"
-                                    class="btn btn-sm btn-outline-danger">
+                                    class="btn btn-sm btn-outline-danger mb-2">
                                     <i class="bi bi-trash"></i> Elimina
                                 </a>
                             </div>
