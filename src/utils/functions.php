@@ -91,7 +91,7 @@ function updateQueryParams($paramsToUpdate)
 function getPendingOrders($orders)
 {
     $pendingOrders = array_filter($orders, function ($order) {
-        return $order['id_stato_ordine'] == 1;
+        return $order['status'] == "in elaborazione";
     });
     return count($pendingOrders);
 }

@@ -337,9 +337,9 @@ class DatabaseHelper
 
     public function getOrdersBySellerId($sellerId)
     {
-        $query = "SELECT o.id, o.data_ordine, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
-                    o.spesa_complessiva, p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
-                    ao.quantita, ao.prezzo, u.nome AS cliente
+        $query = "SELECT o.id, o.data_ordine, o.spesa_complessiva, DATE_ADD(o.data_ordine, INTERVAL 7 DAY) AS consegna_prevista, so.nome AS status,
+                    p.titolo AS prodotto_nome, p.immagine AS prodotto_immagine, p.id AS prodotto_id,
+                    ao.quantita, ao.prezzo, u.username AS cliente
             FROM ordini o
             JOIN articoli_ordine ao ON o.id = ao.id_ordine
             JOIN prodotti p ON ao.id_prodotto = p.id

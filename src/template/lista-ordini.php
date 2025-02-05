@@ -12,7 +12,7 @@
                     </p>
                     <?php if ($templateParams["ruolo"] == "venditore"): ?>
                         <p><strong>Cliente:</strong> <?php echo $ordine["cliente"]; ?></p>
-                        <a href="gestisci-ordine.php?id=<?php echo $ordine["id"]; ?>" class="btn btn-primary">Gestisci
+                        <a href="gestisci-ordine.php?id=<?php echo $ordine["id"]; ?>" class="btn btn-primary mb-2">Gestisci
                             Ordine</a>
                     <?php endif; ?>
                 </div>
