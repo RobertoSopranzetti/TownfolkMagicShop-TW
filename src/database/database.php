@@ -478,33 +478,6 @@ class DatabaseHelper
         return $stmt->execute();
     }
 
-    public function getCartStatuses()
-    {
-        $stmt = $this->db->prepare("SELECT * FROM stati_carrelli");
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getOrderStatuses()
-    {
-        $stmt = $this->db->prepare("SELECT * FROM stati_ordini");
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function getNotificationStatuses()
-    {
-        $stmt = $this->db->prepare("SELECT * FROM stati_notifiche");
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
     public function getMinPrice()
     {
         $stmt = $this->db->prepare("SELECT MIN(prezzo) as min_price FROM prodotti WHERE quantita_disponibile > 0");

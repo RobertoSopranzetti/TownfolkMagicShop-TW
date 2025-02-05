@@ -6,8 +6,12 @@
                 <div class="col-12">
                     <p><strong>Data Ordine:</strong> <?php echo $ordine["data_ordine"]; ?></p>
                     <p><strong>Status:</strong> <?php echo $ordine["status"]; ?></p>
-                    <p><strong>Consegna Prevista:</strong>
-                        <?php echo date('d-m-Y', strtotime($ordine["consegna_prevista"])); ?></p>
+                    <?php if ($ordine["status"] == "consegnato"): ?>
+                        <p><strong>Data Consegna:</strong> <?php echo date('d-m-Y'); ?></p>
+                    <?php else: ?>
+                        <p><strong>Consegna Prevista:</strong>
+                            <?php echo date('d-m-Y', strtotime($ordine["consegna_prevista"])); ?></p>
+                    <?php endif; ?>
                     <p><strong>Spesa Complessiva:</strong> <?php echo number_format($ordine["spesa_complessiva"], 2); ?> €
                     </p>
                     <?php if ($templateParams["ruolo"] == "venditore"): ?>
